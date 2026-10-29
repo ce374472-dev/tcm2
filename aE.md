@@ -20699,7 +20699,7 @@ do
 			textLabel.Position = UDim2.new(0, 13, 0, 7)
 			textLabel.BackgroundTransparency = 1
 			local tbl15 = {}
-			textLabel.Text = tbl14[1] or "so chamar dc nick:tbwj."
+			textLabel.Text = tbl14[1] or "W hub"
 			textLabel.TextColor3 = Theme.Text
 			textLabel.Font = UIFont.Title
 			textLabel.TextSize = 16
@@ -20711,7 +20711,7 @@ do
 			textLabel.Size = UDim2.new(1, -24, 0, 12)
 			textLabel.Position = UDim2.new(0, 12, 0, 5)
 			textLabel.BackgroundTransparency = 1
-			textLabel.Text = tbl14[1] or "so chamar dc nick:tbwj."
+			textLabel.Text = tbl14[1] or "W hub"
 			textLabel.TextColor3 = Theme.Dim
 			textLabel.Font = UIFont.Brand
 			textLabel.TextSize = 8
@@ -20732,7 +20732,7 @@ do
 			textLabel.Size = UDim2.new(1, -58, 0, 12)
 			textLabel.Position = UDim2.new(0, 12, 0, 5)
 			textLabel.BackgroundTransparency = 1
-			textLabel.Text = tbl14[1] or "so chamar dc nick:tbwj."
+			textLabel.Text = tbl14[1] or "W hub"
 			textLabel.TextColor3 = Theme.Dim
 			textLabel.Font = UIFont.Brand
 			textLabel.TextSize = 8
@@ -20790,7 +20790,7 @@ do
 		frame7.Parent = frame6
 		tbl14 = {}
 
-		for match in string.gmatch(arg or "so chamar dc nick:tbwj.", "([^\n]+)") do
+		for match in string.gmatch(arg or "W hub", "([^\n]+)") do
 			table.insert(tbl14, match)
 		end
 
@@ -20799,7 +20799,7 @@ do
 		textLabel.Size = UDim2.new(1, -110, 1, 0)
 		textLabel.Position = UDim2.new(0, 16, 0, 0)
 		textLabel.BackgroundTransparency = 1
-		textLabel.Text = tbl14[1] or "so chamar dc nick:tbwj."
+		textLabel.Text = tbl14[1] or "W hub"
 		textLabel.TextColor3 = Theme.Text
 		textLabel.Font = Enum.Font.GothamBlack
 		textLabel.TextSize = 13
@@ -21807,7 +21807,7 @@ do
 		lg.AutomaticSize = Enum.AutomaticSize.X
 		lg.Size = UDim2.new(0, 0, 1, 1)
 		lg.BackgroundTransparency = 1
-		lg.Text = "so chamar dc nick:tbwj."
+		lg.Text = "W hub"
 		lg.TextColor3 = Color3.new(1, 1, 1)
 		lg.Font = Enum.Font.GothamBlack
 		lg.TextSize = 19
@@ -21871,7 +21871,7 @@ do
 		if _G._uiBuilt then
 			return
 		end
-		main, mainBody = makeMainPanel("so chamar dc nick:tbwj.", UDim2.new(0, 396, 0, 528), UDim2.new(0.5, -200, 0.5, -220))
+		main, mainBody = makeMainPanel("W hub", UDim2.new(0, 396, 0, 528), UDim2.new(0.5, -200, 0.5, -220))
 
 		if mainConfig.AutoCloseOnExec then
 			main.Visible = false
@@ -22069,7 +22069,7 @@ do
 		tpSpeedSettingsPanel.Visible = false
 
 		for i, v11 in ipairs({
-			{ "so chamar dc nick:tbwj.", main },
+			{ "W hub", main },
 			{ "Sticky loves u\nInvisible Steal", panels["Invisible Steal Panel"] },
 			{ "Sticky loves u\nAdmin Command Panel", panels["Admin Command Panel"] },
 			{ "Sticky loves u\nCommand Cooldowns", panels["Command Cooldowns"] },
@@ -28339,7 +28339,7 @@ do
 				lg.AutomaticSize = Enum.AutomaticSize.X
 				lg.Size = UDim2.new(0, 0, 1, 1)
 				lg.BackgroundTransparency = 1
-				lg.Text = "so chamar dc nick:tbwj."
+				lg.Text = "W hub"
 				lg.TextColor3 = Color3.new(1, 1, 1)
 				lg.Font = Enum.Font.GothamBlack
 				lg.TextSize = 19
