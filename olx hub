@@ -12,7 +12,7 @@ end
 
 local MeuNome = string.lower(LocalPlayer.Name)
 
-if MeuNome ~= "idkhxzz" and MeuNome ~= "rickbesthb00" and MeuNome ~= "roborkkj" then
+if MeuNome ~= "idkhxzz" and MeuNome ~= "rickbesthb00" and MeuNome ~= "roborkkj" and MeuNome ~= "teteuh00192" then
     LocalPlayer:Kick("Acesso negado. Você não tem permissão para usar este script.")
     return
 end
