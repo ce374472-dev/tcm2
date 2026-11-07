@@ -1,14 +1,5 @@
--- ============================================================
--- SISTEMA DE WHITELIST (BLOQUEIO POR NICK)
--- ============================================================
-local Players = game:GetService("Players")
-local LocalPlayer = Players.LocalPlayer
-
--- Pega o nome do jogador e deixa TUDO minúsculo para não ter erro de maiúscula
-local MeuNome = string.lower(LocalPlayer.Name)
-
 -- Verifica se o nome (tudo minúsculo) é diferente dos permitidos
-if MeuNome ~= "idkhxzz" and MeuNome ~= "rickbesthb00" then
+if MeuNome ~= "idkhxzz" and MeuNome ~= "rickbesthb00" and MeuNome ~= "roborkkj" then
     LocalPlayer:Kick("Acesso negado. Você não tem permissão para usar este script.")
     return
 end
