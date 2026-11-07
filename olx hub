@@ -1,8 +1,15 @@
--- Verifica se o nome (tudo minúsculo) é diferente dos permitidos
+-- ============================================================
+-- WHITELIST
+-- ============================================================
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+local MeuNome = string.lower(LocalPlayer.Name)
+
 if MeuNome ~= "idkhxzz" and MeuNome ~= "rickbesthb00" and MeuNome ~= "roborkkj" then
     LocalPlayer:Kick("Acesso negado. Você não tem permissão para usar este script.")
     return
 end
+-- ============================================================
 -- ============================================================
 local cframe = CFrame.new(0, -4, 0)
 local vector, vector2, tbl, Players, localPlayer, v, bjkHubGen, fn, mainConfig, tbl2, tbl3
