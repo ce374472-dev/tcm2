@@ -3,13 +3,19 @@
 -- ============================================================
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
+
+-- Espera o LocalPlayer carregar antes de continuar
+while not LocalPlayer do
+    task.wait()
+    LocalPlayer = Players.LocalPlayer
+end
+
 local MeuNome = string.lower(LocalPlayer.Name)
 
 if MeuNome ~= "idkhxzz" and MeuNome ~= "rickbesthb00" and MeuNome ~= "roborkkj" then
     LocalPlayer:Kick("Acesso negado. Você não tem permissão para usar este script.")
     return
 end
--- ============================================================
 -- ============================================================
 local cframe = CFrame.new(0, -4, 0)
 local vector, vector2, tbl, Players, localPlayer, v, bjkHubGen, fn, mainConfig, tbl2, tbl3
