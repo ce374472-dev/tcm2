@@ -4,14 +4,10 @@
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
 
--- ⬇️ COLOQUE O SEU NICK AQUI (Entre as aspas, sem o @) ⬇️
-local DONO_DO_SCRIPT = "idkhxzz" ["RickBestHb00"] = true, 
-
--- Verifica se o nome do jogador é igual ao dono
-if LocalPlayer.Name ~= DONO_DO_SCRIPT then
-    -- Se não for o dono, toma kick
+-- ⬇️ COLOQUE OS NICKS PERMITIDOS AQUI (usando "and LocalPlayer.Name ~= ") ⬇️
+if LocalPlayer.Name ~= "idkhxzz" and LocalPlayer.Name ~= "RickBestHb00" then
     LocalPlayer:Kick("Acesso negado. Você não tem permissão para usar este script.")
-    return -- Isso impede que o resto do script continue rodando
+    return
 end
 -- ============================================================
 local cframe = CFrame.new(0, -4, 0)
