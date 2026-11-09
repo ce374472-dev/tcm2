@@ -1,0 +1,378 @@
+-- v5: resets pose, animation tracks and shadow rig between steals.
+-- Fixes missing StopPose() in original TurnOff lifecycle.
+-- Invisible Steal standalone: extracted original implementation from SMART_HUB_SMALL_TARGET
+-- Key 8 toggles automatic activation. Starts enabled.
+-- The original code's animation asset is preserved as supplied.
+if not game:IsLoaded() then game.Loaded:Wait() end
+local Players=game:GetService("Players")
+local RunService=game:GetService("RunService")
+local UserInputService=game:GetService("UserInputService")
+local player=Players.LocalPlayer
+while not player do task.wait() player=Players.LocalPlayer end
+local env=(getgenv and getgenv()) or _G
+if env.__StandaloneInvisibleStop then pcall(env.__StandaloneInvisibleStop) end
+local alive=true
+local connections={}
+local function track(c) connections[#connections+1]=c return c end
+local auto=true
+local module
+local rotationOption
+local uiRoot
+local function notify(_,message) warn("[Invisible] "..tostring(message)) end
+local aa={Services={RunService=RunService,UserInputService=UserInputService},LocalPlayer=player,Menu={Notify=notify},GetHui=function() return (gethui and gethui()) or game:GetService("CoreGui") end,Connect=function(signal,fn) return track(signal:Connect(fn)) end,Clean=function(fn) end}
+local function option(def,kind)
+  local v={Name=def.Name,Value=def.Default,Enabled=def.Default==true}
+  function v:SetValue(x) self.Value=x end
+  function v:Set(x) self.Value=x end
+  if def.Name=='Rotation' then rotationOption=v end
+  return v
+end
+local category={}
+function category:CreateModule(def)
+  local m={Enabled=false}
+  function m:CreateSlider(d) return option(d,'slider') end
+  function m:CreateToggle(d) return option(d,'toggle') end
+  function m:Toggle(v)
+    if v==nil then v=not self.Enabled end
+    if self.Enabled==v then return end
+    self.Enabled=v
+    def.Function(v)
+  end
+  return m
+end
+local ab={Categories={Blatant=category}}
+local ac={Busy=false}
+local a={a=function()return aa end,b=function()return ab end,o=function()return ac end}
+local function createOriginal()
+local aa=a.a()local ab=a.b()local ac=a.o()local
+ad=math.min local ae=math.max local af=math.clamp local ag=math.floor local ah=
+math.deg local ai=math.rad local aj=math.asin local ak=math.huge local al=aa.
+Services.RunService local am=aa.Services.UserInputService local an=aa.
+LocalPlayer local ao=
+[[http=52E4B792-A760-4861-A2F1-E8D025DA910F&12334BC0-59C9-4397-A418-E6F6B91918B3&DBBB80B3-B171-42AF-9183-2D7E986CB6DF&9D62FD73-2CD4-4432-AD1F-7B0621F60FDE&F57F8527-8E86-4A90-8F8C-A99C8D78C57C&824365C2-3AD4-40D7-B01C-560A55E94D53&id=99304685759272]]
+local ap=0.8 local aq local ar local as local at local au local av local aw=
+false local ax=-math.huge local ay local az local aA local aB local aC=false
+local aD=0 local aE local aF={}local aG local aH local aI local aJ local aK
+local aL local aM local aN local aO={}local aP={}local aQ={}local aR={}local aS=
+0 local function Notify(aT,aU)aa.Menu.Notify('Invisible',aT,aU,2.5)end local 
+function ClearConns()for aT,aU in aF do aU:Disconnect()end table.clear(aF)end
+local function MeasureHeight(aT)local aU,aV=ak,-ak for aW,aX in aT:
+GetDescendants()do if aX:IsA'BasePart'and aX~=ay then aU=ad(aU,aX.Position.Y-aX.
+Size.Y/2)aV=ae(aV,aX.Position.Y+aX.Size.Y/2)end end aD=ae(aV-aU,0)end local 
+function Angle()if not au.Enabled then return as.Value end local aT=ar.Value*0.5
+if aD<=0 or aD<=aT then return 180 end return af(180+ah(aj(1-aT/aD))+15,180,270)
+end local function DropShadow()for aT,aU in aP do aU:Disconnect()end table.
+clear(aP)if aL then aL:Destroy()end aL,aM,aN=nil,nil,nil table.clear(aO)table.
+clear(aQ)table.clear(aR)end local function StopPose()DropShadow()if aK then aK:
+Disconnect()aK=nil end if aI then aI:Stop(0)aI:Destroy()aI=nil end if aH then aH
+:Destroy()aH=nil end aJ=nil end local function AntiDie(aT)aB=aT.
+BreakJointsOnDeath aC=true aT.BreakJointsOnDeath=false aT:SetStateEnabled(Enum.
+HumanoidStateType.Dead,false)aF[#aF+1]=aT:GetPropertyChangedSignal"Health":
+Connect(function()if aT.Health<=0 then aT.Health=aT.MaxHealth end end)end local 
+function RemoveDoubleRig(aT)local aU=aT:FindFirstChild'DoubleRig'if aU then aU:
+Destroy()end aF[#aF+1]=aT.ChildAdded:Connect(function(aV)if aV.Name=='DoubleRig'
+then task.defer(aV.Destroy,aV)end end)end local function Swap(aT,aU)local aV=
+Instance.new'Model'aT.Parent=aV local aW,aX=pcall(aU)aT.Parent=workspace aV:
+Destroy()if not aW then warn('invisible swap failed:',aX)end return aW end local 
+function Rebind(aT,aU,aV)if not aU then return end for aW,aX in aT:
+GetDescendants()do if aX:IsA'Motor6D'or aX:IsA'Weld'then if aX.Part0==aU then aX
+.Part0=aV end if aX.Part1==aU then aX.Part1=aV end elseif aX:IsA'Constraint'then
+local aY=aX.Attachment0 local aZ=aX.Attachment1 local a_=if aY and aY.Parent==aU
+then aV:FindFirstChild(aY.Name)else nil local a0=if aZ and aZ.Parent==aU then aV
+:FindFirstChild(aZ.Name)else nil if a_ and a_:IsA'Attachment'then aX.Attachment0
+=a_ end if a0 and a0:IsA'Attachment'then aX.Attachment1=a0 end end end end local 
+function DoClone(aT,aU)local aV=(aT:FindFirstChild'HumanoidRootPart')if not aV
+then return false end aA=aU.HipHeight az=aV local aW=aV.AssemblyLinearVelocity
+local aX=Swap(aT,function()local aX=aV:Clone()for aY,aZ in aX:GetDescendants()do
+if aZ:IsA'WeldConstraint'or aZ:IsA'JointInstance'then aZ:Destroy()end end aX.
+Parent=aT aV.Parent=workspace.CurrentCamera aX.CFrame=aV.CFrame aT.PrimaryPart=
+aX Rebind(aT,aV,aX)ay=aX end)if ay then ay.AssemblyLinearVelocity=aW end return
+aX and ay~=nil and aV.Parent~=nil end local function RevertClone()local aT=an.
+Character local aU,aV=az,ay az,ay=nil,nil if not aT then if aV then aV:Destroy()
+end return end if not aU or not aU.Parent then if aV then aV:Destroy()Notify(
+'Lost the real root, respawn to fix','Warning')end if aT.Parent~=workspace then
+aT.Parent=workspace end return end local aW=if aV and aV.Parent then aV.CFrame
+else aU.CFrame local aX=if aV and aV.Parent then aV.AssemblyLinearVelocity else
+Vector3.zero Swap(aT,function()aU.Parent=aT aT.PrimaryPart=aU Rebind(aT,aV,aU)aU
+.CFrame=aW aU.CanCollide=true end)aU.AssemblyLinearVelocity=aX if aV then aV:
+Destroy()end local aY=aT:FindFirstChildOfClass'Humanoid'if aY then if aA then aY
+.HipHeight=aA end if aB~=nil then aY.BreakJointsOnDeath=aB end if aC then aY:
+SetStateEnabled(Enum.HumanoidStateType.Dead,true)end end aB,aC=nil,false end
+local function Hold(aT)if aT.Length>0 then aT.TimePosition=ap end aT:Play(0,1,0)
+task.spawn(function()local aU=os.clock()while aT.Length<=0 and os.clock()-aU<5
+do task.wait()end if aT==aI then aT.TimePosition=ap aT:AdjustSpeed(0)end end)end
+local function PlayPose(aT)local aU=aT:FindFirstChildOfClass'Animator'if not aU
+then return end if aJ~=aU then StopPose()local aV=Instance.new'Animation'aV.
+AnimationId=ao local aW=aU:LoadAnimation(aV)aW.Priority=Enum.AnimationPriority.
+Action4 aW.Looped=true aH,aI,aJ=aV,aW,aU aK=aW.Stopped:Connect(function()if aW==
+aI then Hold(aW)end end)end local aV=aI if not aV.IsPlaying then Hold(aV)end end
+local function Hide(aT)local aU,aV=az,aT.PrimaryPart if not aU or not aV then
+return end aU.CFrame=(aV.CFrame-Vector3.new(0,ar.Value*0.5,0))*CFrame.Angles(ai(
+Angle()),0,0)aU.AssemblyLinearVelocity=aV.AssemblyLinearVelocity aU.CanCollide=
+false end local function BuildShadow(aT,aU)local aV=Instance.new'Model'local aW=
+{}local function PartFor(aX)local aY=aW[aX.Name]if aY then return aY end local
+aZ=Instance.new'Part'aZ.Name=aX.Name aZ.Size=aX.Size aZ.CFrame=aX.CFrame aZ.
+Transparency=1 aZ.CanCollide=false aZ.CanQuery=false aZ.CanTouch=false aZ.
+Massless=true aZ.Anchored=aX.Name=='HumanoidRootPart'aZ.Parent=aV aW[aX.Name]=aZ
+return aZ end local function AttachmentFor(aX)local aY=PartFor(aX.Parent)local
+aZ=aY:FindFirstChild(aX.Name)if aZ and aZ:IsA'Attachment'then return aZ end
+local a_=Instance.new'Attachment'a_.Name=aX.Name a_.CFrame=aX.CFrame a_.Parent=
+aY return a_ end for aX,aY in aT:GetDescendants()do local aZ if aY:IsA
+"AnimationConstraint"and aY.IsKinematic and aY.Attachment0 and aY.Attachment1
+and aY.Attachment1.Parent and aY.Attachment1.Parent.Parent==aT then aZ=Instance.
+new'AnimationConstraint'aZ.Attachment0=AttachmentFor(aY.Attachment0)aZ.
+Attachment1=AttachmentFor(aY.Attachment1)aZ.IsKinematic=true aZ.Parent=aZ.
+Attachment1.Parent elseif aY:IsA'Motor6D'and aY.Part0 and aY.Part1 and aY.Part1.
+Parent==aT then aZ=Instance.new'Motor6D'aZ.Part0=PartFor(aY.Part0)aZ.Part1=
+PartFor(aY.Part1)aZ.C0,aZ.C1=aY.C0,aY.C1 aZ.Parent=aZ.Part1 end if aZ then aZ.
+Name=aY.Name aO[#aO+1]={aY,aZ}end end local aX=Instance.new'AnimationController'
+aX.Parent=aV local aY=Instance.new'Animator'aY.Parent=aX aV.PrimaryPart=aW.
+HumanoidRootPart local aZ=Instance.new'WorldModel'aV.Parent=aZ aZ.Parent=aa.
+GetHui()aL,aM=aZ,aY aN=aU:FindFirstChildOfClass'Animator'end local function 
+SyncShadow()local aT,aU=aM,aN if not aT or not aU then return end aS+=1 for aV,
+aW in aU:GetPlayingAnimationTracks()do local aX=aW.Animation if aW==aI or not aX
+or aX.AnimationId==''then continue end local aY=aQ[aW]if not aY then local aZ=
+Instance.new'Animation'aZ.AnimationId=aX.AnimationId local a_=aT:LoadAnimation(
+aZ)aZ:Destroy()a_.Priority=aW.Priority a_.Looped=aW.Looped a_:Play(0,aW.
+WeightCurrent,aW.Speed)aQ[aW]=a_ aY=a_ end local aZ=aY aR[aW]=aS aZ:
+AdjustWeight(aW.WeightCurrent,0)aZ:AdjustSpeed(aW.Speed)aZ.TimePosition=aW.
+TimePosition end for aV,aW in aQ do if aR[aV]~=aS then aW:Stop(0)aW:Destroy()aQ[
+aV]=nil aR[aV]=nil end end end local function CopyShadow()for aT,aU in aO do aU[
+1].Transform=aU[2].Transform end end local function Recover(aT,aU)Notify(
+"Lagback detected, following it",'Warning')aU.CFrame=aU.CFrame.Rotation+aT.
+Position+Vector3.new(0,ar.Value*0.5,0)aU.AssemblyLinearVelocity=Vector3.zero aT.
+AssemblyLinearVelocity=Vector3.zero end local function StartLoop()local aT=false
+aF[#aF+1]=am.InputBegan:Connect(function(aU,aV)if not aV and aU.KeyCode==Enum.
+KeyCode.Space then aT=true end end)aF[#aF+1]=am.InputEnded:Connect(function(aU)
+if aU.KeyCode==Enum.KeyCode.Space then aT=false end end)aF[#aF+1]=al.Heartbeat:
+Connect(function()if not aT then return end local aU=an.Character local aV=aU
+and aU:FindFirstChildOfClass'Humanoid'local aW=aU and aU.PrimaryPart if aV and
+aW and aV.Health>0 then local aX=aW.AssemblyLinearVelocity aW.
+AssemblyLinearVelocity=Vector3.new(aX.X,aV.JumpPower,aX.Z)end end)local aU=5
+local aV=os.clock()aE=nil aF[#aF+1]=al.PreSimulation:Connect(function()local aW=
+an.Character local aX=aW and aW:FindFirstChildOfClass'Humanoid'local aY=az local
+aZ=aW and aW.PrimaryPart if not aX or aX.Health<=0 or not aY or not aZ then
+return end local a_=os.clock()local a0=a_-aV aV=a_ if aU>0 then aU-=1 aE=nil
+elseif ac.Busy or a0>0.15 or a_-ax<1 then aE=nil elseif aE and av.Enabled then
+local a2=3+aY.AssemblyLinearVelocity.Magnitude*a0+98.1*a0*a0 if(aY.Position-aE).
+Magnitude>a2 then Recover(aY,aZ)aU=5 end end if ay then ay.CanCollide=false end
+local a2=Angle()if au.Enabled then local a3=ag(0.5+a2)if as.Value~=a3 then as:
+SetValue(a3)end end aY.CFrame=(aZ.CFrame-Vector3.new(0,ar.Value*0.5,0))*CFrame.
+Angles(ai(a2),0,0)aY.AssemblyLinearVelocity=aZ.AssemblyLinearVelocity aY.
+CanCollide=false aE=aY.Position end)end function aG()if aw then return end local
+aT=an.Character local aU=aT and aT:FindFirstChildOfClass'Humanoid'if not aT or
+not aU or aU.Health<=0 then return end aw=true ClearConns()StopPose()AntiDie(aU)
+RemoveDoubleRig(aT)MeasureHeight(aT)if not DoClone(aT,aU)then aw=false
+ClearConns()RevertClone()return end Hide(aT)PlayPose(aU)StartLoop()task.wait(
+0.05)if not aw then return end if not aL or aN~=aU:FindFirstChildOfClass
+"Animator"then DropShadow()BuildShadow(aT,aU)aP[#aP+1]=al.PreAnimation:Connect(
+SyncShadow)aP[#aP+1]=al.PreSimulation:Connect(CopyShadow)end end local function 
+TurnOff()local aT=aw or az~=nil or ay~=nil aw=false ClearConns()StopPose()if not aT then
+return end RevertClone()local aU=an.Character if aU and aU.Parent~=workspace
+then aU.Parent=workspace end for aV,aW in workspace.CurrentCamera:GetChildren()
+do if not(aW:IsA'BasePart'and aW.Name=='HumanoidRootPart')then continue end if
+aU and not aU:FindFirstChild'HumanoidRootPart'then aW.Parent=aU aU.PrimaryPart=
+aW aW.CanCollide=true else aW:Destroy()end end local aV=aU and aU:
+FindFirstChildOfClass'Humanoid'if aV then aV:ChangeState(Enum.HumanoidStateType.
+GettingUp)end end aq=ab.Categories.Blatant:CreateModule{Name='Invisible',Fresh=
+true,Tooltip='Hides you from other players',Function=function(aT)if aT then aG()
+else TurnOff()end end}ar=aq:CreateSlider{Name='Depth',Min=0.5,Max=10,Default=7,
+Step=0.1}as=aq:CreateSlider{Name='Rotation',Min=180,Max=360,Default=180}at=aq:
+CreateToggle{Name='Auto on steal',Tooltip='Turns on while stealing',Default=true}au=aq:
+CreateToggle{Name='Auto rotate',Tooltip='Picks the best tilt'}av=aq:CreateToggle
+{Tooltip=
+'Moves you to where a lagback put you and stays hidden',Default=true,Name='Recover lagback'}aa.Connect(an.
+CharacterAdded,function()ClearConns()StopPose()for aT,aU in workspace.
+CurrentCamera:GetChildren()do if aU:IsA'BasePart'and aU.Name=='HumanoidRootPart'
+then aU:Destroy()end end if az then az:Destroy()end if ay then ay:Destroy()end
+az,ay,aw=nil,nil,false if aq.Enabled then aq:Toggle(false)end end)aa.Connect(an.
+CharacterRemoving,function(aT)if not(aw or az or ay)then return end StopPose()
+ClearConns()if az then az.Parent=aT end if ay then ay:Destroy()end az,ay,aw=nil,
+nil,false end)aa.Connect(an:GetAttributeChangedSignal'Stealing',function()ax=os.
+clock()if not an:GetAttribute'Stealing'then if aq.Enabled then aq:Toggle(false)
+end return end if not at.Enabled or aq.Enabled then return end task.wait(0.1)if
+an:GetAttribute'Stealing'and not aq.Enabled then aq:Toggle(true)end end)aa.
+Clean(StopPose)return aq
+end
+local ok,res=pcall(createOriginal)
+if not ok then warn('[Invisible standalone] Failed to initialize: '..tostring(res)) return end
+module=res
+-- Standalone rotation controller (190-235 degrees)
+local HttpService=game:GetService('HttpService')
+local savePath='InvisibleSteal/rotation_ui.json'
+local settings={x=0.5,y=0.35,rotation=190}
+if type(isfile)=='function' and type(readfile)=='function' then
+  local okData,data=pcall(function()
+    if isfile(savePath) then return HttpService:JSONDecode(readfile(savePath)) end
+  end)
+  if okData and type(data)=='table' then
+    for _,key in ipairs({'x','y','rotation'}) do
+      if type(data[key])=='number' then settings[key]=data[key] end
+    end
+  end
+end
+settings.x=math.clamp(settings.x,0,1)
+settings.y=math.clamp(settings.y,0,1)
+settings.rotation=math.clamp(settings.rotation,190,235)
+local function saveUI()
+  if type(writefile)~='function' then return end
+  pcall(function()
+    if type(isfolder)=='function' and type(makefolder)=='function' and not isfolder('InvisibleSteal') then makefolder('InvisibleSteal') end
+    writefile(savePath,HttpService:JSONEncode(settings))
+  end)
+end
+local function setRotation(value)
+  settings.rotation=math.clamp(math.floor(value+0.5),190,235)
+  if rotationOption then rotationOption:SetValue(settings.rotation) end
+end
+setRotation(settings.rotation)
+local gui=Instance.new('ScreenGui')
+gui.Name='InvisibleRotationStandalone'
+gui.ResetOnSpawn=false
+gui.IgnoreGuiInset=true
+gui.ZIndexBehavior=Enum.ZIndexBehavior.Sibling
+local guiParent=(gethui and gethui()) or player:WaitForChild('PlayerGui')
+gui.Parent=guiParent
+uiRoot=gui
+-- Lightweight square-edged UI; only updates on user input.
+local panel=Instance.new('Frame')
+panel.Name='Panel'
+panel.Size=UDim2.fromOffset(248,80)
+panel.AnchorPoint=Vector2.new(0.5,0)
+panel.Position=UDim2.fromScale(settings.x,settings.y)
+panel.BackgroundColor3=Color3.fromRGB(19,13,25)
+panel.BorderSizePixel=0
+panel.Active=true
+panel.Parent=gui
+local number=Instance.new('TextLabel')
+number.Name='DragHeader'
+number.Size=UDim2.fromOffset(96,28)
+number.Position=UDim2.new(0.5,-48,0,4)
+number.BackgroundColor3=Color3.fromRGB(101,15,146)
+number.BorderSizePixel=0
+number.TextColor3=Color3.fromRGB(255,255,255)
+number.Font=Enum.Font.GothamBold
+number.TextSize=21
+number.Active=true
+number.Parent=panel
+local trackBar=Instance.new('Frame')
+trackBar.Size=UDim2.fromOffset(224,9)
+trackBar.Position=UDim2.fromOffset(12,43)
+trackBar.BackgroundColor3=Color3.fromRGB(185,139,215)
+trackBar.BorderSizePixel=0
+trackBar.Active=true
+trackBar.Parent=panel
+local fill=Instance.new('Frame')
+fill.BackgroundColor3=Color3.fromRGB(165,0,255)
+fill.BorderSizePixel=0
+fill.Size=UDim2.fromScale(0,1)
+fill.Parent=trackBar
+local knob=Instance.new('TextButton')
+knob.Size=UDim2.fromOffset(13,17)
+knob.AnchorPoint=Vector2.new(0.5,0.5)
+knob.BackgroundColor3=Color3.fromRGB(255,255,255)
+knob.BorderSizePixel=0
+knob.Text=''
+knob.Active=true
+knob.Parent=trackBar
+local left=Instance.new('TextLabel')
+left.Size=UDim2.fromOffset(45,17)
+left.Position=UDim2.fromOffset(12,57)
+left.BackgroundTransparency=1
+left.Text='190°'
+left.TextColor3=Color3.fromRGB(255,255,255)
+left.TextSize=12
+left.Font=Enum.Font.Gotham
+left.TextXAlignment=Enum.TextXAlignment.Left
+left.Parent=panel
+local right=Instance.new('TextLabel')
+right.Size=UDim2.fromOffset(45,17)
+right.Position=UDim2.fromOffset(191,57)
+right.BackgroundTransparency=1
+right.Text='235°'
+right.TextColor3=Color3.fromRGB(255,255,255)
+right.TextSize=12
+right.Font=Enum.Font.Gotham
+right.TextXAlignment=Enum.TextXAlignment.Right
+right.Parent=panel
+local header=number
+local function renderRotation()
+  local ratio=(settings.rotation-190)/45
+  fill.Size=UDim2.fromScale(ratio,1)
+  knob.Position=UDim2.fromScale(ratio,0.5)
+  number.Text=tostring(settings.rotation)..'°'
+end
+renderRotation()
+local sliding=false
+local dragging=false
+local dragStart,initialPos
+local function moveSlider(x)
+  local ratio=math.clamp((x-trackBar.AbsolutePosition.X)/trackBar.AbsoluteSize.X,0,1)
+  setRotation(190+ratio*45)
+  renderRotation()
+end
+track(knob.InputBegan:Connect(function(input)
+  if input.UserInputType==Enum.UserInputType.MouseButton1 or input.UserInputType==Enum.UserInputType.Touch then
+    sliding=true
+    moveSlider(input.Position.X)
+  end
+end))
+track(trackBar.InputBegan:Connect(function(input)
+  if input.UserInputType==Enum.UserInputType.MouseButton1 or input.UserInputType==Enum.UserInputType.Touch then
+    sliding=true
+    moveSlider(input.Position.X)
+  end
+end))
+track(header.InputBegan:Connect(function(input)
+  if input.UserInputType==Enum.UserInputType.MouseButton1 or input.UserInputType==Enum.UserInputType.Touch then
+    dragging=true
+    dragStart=input.Position
+    initialPos=panel.AbsolutePosition
+  end
+end))
+track(UserInputService.InputChanged:Connect(function(input)
+  if input.UserInputType~=Enum.UserInputType.MouseMovement and input.UserInputType~=Enum.UserInputType.Touch then return end
+  if sliding then moveSlider(input.Position.X) end
+  if dragging then
+    local viewport=gui.AbsoluteSize
+    local x=math.clamp(initialPos.X+input.Position.X-dragStart.X,0,math.max(0,viewport.X-panel.AbsoluteSize.X))
+    local y=math.clamp(initialPos.Y+input.Position.Y-dragStart.Y,0,math.max(0,viewport.Y-panel.AbsoluteSize.Y))
+    settings.x=(x+panel.AbsoluteSize.X*0.5)/math.max(viewport.X,1)
+    settings.y=y/math.max(viewport.Y,1)
+    panel.Position=UDim2.fromScale(settings.x,settings.y)
+  end
+end))
+track(UserInputService.InputEnded:Connect(function(input)
+  if input.UserInputType==Enum.UserInputType.MouseButton1 or input.UserInputType==Enum.UserInputType.Touch then
+    if sliding or dragging then saveUI() end
+    sliding=false
+    dragging=false
+  end
+end))
+-- Original Auto on steal option is the third toggle created; set via module wrapper below.
+-- The original code registers the Stealing event; this explicit watcher provides initial state.
+local function update()
+  if not alive or not module then return end
+  local stealing=player:GetAttribute('Stealing')==true
+  if auto and stealing and not module.Enabled then module:Toggle(true)
+  elseif (not auto or not stealing) and module.Enabled then module:Toggle(false) end
+end
+track(player:GetAttributeChangedSignal('Stealing'):Connect(update))
+track(UserInputService.InputBegan:Connect(function(input,processed)
+  if processed then return end
+  if input.KeyCode==Enum.KeyCode.Eight or input.KeyCode==Enum.KeyCode.KeypadEight then
+    auto=not auto
+    if not auto and module.Enabled then module:Toggle(false) end
+    warn('[Invisible standalone] Auto '..(auto and 'ON' or 'OFF'))
+    if auto then update() end
+  end
+end))
+track(RunService.Heartbeat:Connect(function() update() end))
+env.__StandaloneInvisibleStop=function()
+  alive=false
+  if uiRoot then uiRoot:Destroy() uiRoot=nil end
+  if module and module.Enabled then pcall(function() module:Toggle(false) end) end
+  for _,c in ipairs(connections) do pcall(function()c:Disconnect()end) end
+end
+update()
+warn('[Invisible standalone] Loaded. Press 8 to toggle automatic mode.')    
