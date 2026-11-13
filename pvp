@@ -1,4 +1,36 @@
+- ============================================================
+-- WHITELIST
+-- ============================================================
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
 
+-- Espera o LocalPlayer carregar antes de continuar
+while not LocalPlayer do
+    task.wait()
+    LocalPlayer = Players.LocalPlayer
+end
+
+local WHITELIST = {
+    "idkhxzz",
+    "lims1002",
+    "EO_MANDRAKZIN001",
+}
+
+local MeuNome = string.lower(LocalPlayer.Name)
+local permitido = false
+
+for _, nome in ipairs(WHITELIST) do
+    if MeuNome == nome then
+        permitido = true
+        break
+    end
+end
+
+if not permitido then
+    LocalPlayer:Kick("Acesso negado. Você não tem permissão para usar este script.")
+    return
+end
+-- ============================================================
 if _G.RivalHubRunning then
     warn("[Rival Hub] Instancia previa detectada. Se recomienda rejoin si hay comportamiento errático.")
 end
