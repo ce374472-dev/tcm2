@@ -6301,7 +6301,7 @@ function setupSpeedIndicator(char)
     local text = Instance.new("TextLabel", tag)
     text.Size = UDim2.fromScale(1, 1)
     text.BackgroundTransparency = 1
-    text.Text = "discord.gg/RY84KrvjtY"
+    text.Text = "https://discord.gg/smYXrSeYU5"
     text.TextColor3 = getThemeColor()
     text.TextStrokeColor3 = Color3.fromRGB(5, 7, 10)
     text.TextStrokeTransparency = 0.2
