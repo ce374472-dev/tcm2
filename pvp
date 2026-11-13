@@ -13,6 +13,7 @@ local WHITELIST = {
     "idkhxzz",
     "lims1002",
     "eo_mandrakzin001",
+    "farm100231",
 }
 
 local MeuNome = string.lower(LocalPlayer.Name)
