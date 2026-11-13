@@ -39,10 +39,10 @@ _G.RivalHubRunning = true
 _G.RivalHubSession = (_G.RivalHubSession or 0) + 1
 local _mySession = _G.RivalHubSession
 
--- SCREAMHUB cinematic intro — max effects, wave, sound, click to skip
+-- vexzHUB cinematic intro — max effects, wave, sound, click to skip
 task.spawn(function()
     local introGui = Instance.new("ScreenGui")
-    introGui.Name = "ScreamHubIntro"
+    introGui.Name = "vexzHubIntro"
     introGui.IgnoreGuiInset = true
     introGui.ResetOnSpawn = false
     introGui.DisplayOrder = 100000
@@ -112,7 +112,7 @@ task.spawn(function()
     -- Intro sound
     pcall(function()
         introSound = Instance.new("Sound")
-        introSound.Name = "ScreamHubIntroSound"
+        introSound.Name = "vexzHubIntroSound"
         introSound.SoundId = "rbxassetid://113111119641714"
         introSound.Volume = 1
         introSound.Looped = false
@@ -646,14 +646,14 @@ local State = {
     bypassBatEnabled = false,
     bypassBatSpeed = BYPASS_AIMBOT_SPEED,
 }
-CONFIG_FILE = "SCREAMHUB_" .. tostring(LP.UserId) .. ".json"
+CONFIG_FILE = "vexzHUB_" .. tostring(LP.UserId) .. ".json"
 BAT_V2_HIT_DIST = 4.5
 _isDraggingButton = false
 
 backgroundIndex = 1
--- 3 backgrounds Ghostface / Scream
+-- 3 backgrounds Ghostface / vexz
 backgroundImages = {"118091463452609", "78348128982741", "135417991017029"}
-ScreamUI = {effects = true, animated = {}, cards = {}, tweens = {}, backgroundRevision = 0}
+vexzUI = {effects = true, animated = {}, cards = {}, tweens = {}, backgroundRevision = 0}
 useVenixCarryEngine = false
 
 backgroundImageTransparency = 0
@@ -679,19 +679,19 @@ function applyBackgroundMode(mode)
         backgroundIndex = _clamp(_floor(n), 1, #backgroundImages)
         backgroundMode = "Background " .. backgroundIndex
     end
-    ScreamUI.backgroundRevision = ScreamUI.backgroundRevision + 1
-    local revision = ScreamUI.backgroundRevision
+    vexzUI.backgroundRevision = vexzUI.backgroundRevision + 1
+    local revision = vexzUI.backgroundRevision
     if main then
         main.BackgroundColor3 = Color3.fromRGB(9, 7, 14)
         main.BackgroundTransparency = 0
         local bg = main:FindFirstChild("BackgroundImage")
         local overlay = main:FindFirstChild("BackgroundIncoming")
         if overlay then overlay:Destroy() end
-        if ScreamUI.backgroundTween then ScreamUI.backgroundTween:Cancel() end
+        if vexzUI.backgroundTween then vexzUI.backgroundTween:Cancel() end
         if bg then
             local asset = "rbxassetid://" .. backgroundImages[backgroundIndex]
             local opacity = backgroundMode == "None" and 1 or backgroundImageTransparency
-            if backgroundMode == "None" or not ScreamUI.effects or bg.Image == asset then
+            if backgroundMode == "None" or not vexzUI.effects or bg.Image == asset then
                 bg.Image = asset
                 bg.ImageTransparency = opacity
             else
@@ -701,25 +701,25 @@ function applyBackgroundMode(mode)
                 incoming.ImageTransparency = 1
                 incoming.ZIndex = 1
                 incoming.Parent = main
-                ScreamUI.backgroundTween = TS:Create(incoming, TweenInfo.new(0.28, Enum.EasingStyle.Quad), {ImageTransparency = opacity})
-                ScreamUI.backgroundTween.Completed:Connect(function()
-                    if revision == ScreamUI.backgroundRevision and bg.Parent then
+                vexzUI.backgroundTween = TS:Create(incoming, TweenInfo.new(0.28, Enum.EasingStyle.Quad), {ImageTransparency = opacity})
+                vexzUI.backgroundTween.Completed:Connect(function()
+                    if revision == vexzUI.backgroundRevision and bg.Parent then
                         bg.Image = asset
                         bg.ImageTransparency = opacity
                     end
                     if incoming.Parent then incoming:Destroy() end
                 end)
-                ScreamUI.backgroundTween:Play()
+                vexzUI.backgroundTween:Play()
             end
         end
     end
-    if ScreamUI.art and ScreamUI.art.Parent then
-        ScreamUI.art.Image = "rbxassetid://" .. backgroundImages[backgroundIndex]
-        ScreamUI.art.Visible = backgroundMode ~= "None"
+    if vexzUI.art and vexzUI.art.Parent then
+        vexzUI.art.Image = "rbxassetid://" .. backgroundImages[backgroundIndex]
+        vexzUI.art.Visible = backgroundMode ~= "None"
     end
     if miniBackgroundImage then miniBackgroundImage.Visible = false end
     if backgroundSelectorLabel then backgroundSelectorLabel.Text = backgroundMode end
-    for i, card in ipairs(ScreamUI.cards) do
+    for i, card in ipairs(vexzUI.cards) do
         if card.Parent then
             local stroke = card:FindFirstChildOfClass("UIStroke")
             if stroke then stroke.Transparency = backgroundMode ~= "None" and i == backgroundIndex and 0 or 0.72 end
@@ -871,8 +871,8 @@ function updateAllUIThemeColors(color)
         pbFrame.BackgroundColor3 = Color3.fromRGB(14, 10, 22)
     end
 
-    if ScreamUI.speedStroke and ScreamUI.speedStroke.Parent then ScreamUI.speedStroke.Color = color end
-    if ScreamUI.discordLabel and ScreamUI.discordLabel.Parent then ScreamUI.discordLabel.TextColor3 = color end
+    if vexzUI.speedStroke and vexzUI.speedStroke.Parent then vexzUI.speedStroke.Color = color end
+    if vexzUI.discordLabel and vexzUI.discordLabel.Parent then vexzUI.discordLabel.TextColor3 = color end
 
     if _uicStroke then _uicStroke.Color = color end
     if _uicAvatarStroke then _uicAvatarStroke.Color = color end
@@ -925,7 +925,7 @@ function updateAllUIThemeColors(color)
         local caption = tab:FindFirstChild("Caption")
         if caption then caption.TextColor3 = active and Color3.fromRGB(242, 238, 252) or Color3.fromRGB(98, 88, 120) end
     end
-    if ScreamFX and ScreamFX.refreshAccent then pcall(ScreamFX.refreshAccent, color) end
+    if vexzFX and vexzFX.refreshAccent then pcall(vexzFX.refreshAccent, color) end
     if _G.__RivalHubRefreshESPTheme then pcall(_G.__RivalHubRefreshESPTheme, color) end
     if main then
         local titleFrame = main:FindFirstChild("Frame")
@@ -1342,7 +1342,7 @@ local outfitSelectorLabel = nil
 
 VX7A = {
     index = 0, mod = nil, loading = false, busy = false, pending = nil, label = nil,
-    labels = {"OFF", "ALIEN", "OUTFIT", "OUTFIT 2", "OUTFIT 3", "OUTFIT 4", "OUTFIT 5", "OUTFIT 6", "SCREAM", "NEW SKIN"},
+    labels = {"OFF", "ALIEN", "OUTFIT", "OUTFIT 2", "OUTFIT 3", "OUTFIT 4", "OUTFIT 5", "OUTFIT 6", "vexz", "NEW SKIN"},
 }
 VX7A.src = [==[
 local Players = game:GetService("Players")
@@ -1415,7 +1415,7 @@ clearOriginalWearables = true,
 items = {74891470, 4390891467, 91274263831244, 128424248603010, 91151766440767, 17044638424},
 },
 {
-label = "SCREAM",
+label = "vexz",
 hideOriginal = false,
 headless = true,
 hideRightLeg = true,
@@ -3622,8 +3622,8 @@ function InfiniteJump.isRunning() return InfiniteJump.enabled == true end
 InfiniteJump.stop()
 
 function getActiveMoveSpeed()
-    if useVenixCarryEngine and ScreamVenixCarry and ScreamVenixCarry:isRunning() then
-        return ScreamVenixCarry:getActiveSpeed()
+    if useVenixCarryEngine and vexzVenixCarry and vexzVenixCarry:isRunning() then
+        return vexzVenixCarry:getActiveSpeed()
     end
     -- Source speedundetect: steal speed when Carry toggled OR player is Stealing
     local isStealing = false
@@ -3658,8 +3658,8 @@ end
 local _s2VelState = {root = nil, v = _V3zero}
 local _velChecked = setmetatable({}, {__mode = "k"})
 local _hookedVelParts = {}
-local _velocityHook = _G.__ScreamVelocityHook or {hooked = false, roots = setmetatable({}, {__mode = "k"})}
-_G.__ScreamVelocityHook = _velocityHook
+local _velocityHook = _G.__vexzVelocityHook or {hooked = false, roots = setmetatable({}, {__mode = "k"})}
+_G.__vexzVelocityHook = _velocityHook
 local function _hookVelHRP(root)
     if not root then return end
     _s2VelState.root = root
@@ -3741,7 +3741,7 @@ function getAutoPathSpeed()
     return NS
 end
 
-        ScreamVenixCarry = {
+        vexzVenixCarry = {
             normalSpeed = NS,
             carrySpeed = CS,
             laggerSpeed = LAGGER_SPEED,
@@ -3876,44 +3876,44 @@ end
         }
         do
             local function destroyLV()
-                if ScreamVenixCarry._lvBoost and ScreamVenixCarry._lvBoost.Parent then
+                if vexzVenixCarry._lvBoost and vexzVenixCarry._lvBoost.Parent then
                     pcall(function()
-                        ScreamVenixCarry._lvBoost:Destroy()
+                        vexzVenixCarry._lvBoost:Destroy()
                     end)
                 end
-                if ScreamVenixCarry._lvAtt and ScreamVenixCarry._lvAtt.Parent then
+                if vexzVenixCarry._lvAtt and vexzVenixCarry._lvAtt.Parent then
                     pcall(function()
-                        ScreamVenixCarry._lvAtt:Destroy()
+                        vexzVenixCarry._lvAtt:Destroy()
                     end)
                 end
-                ScreamVenixCarry._lvBoost = nil
-                ScreamVenixCarry._lvAtt = nil
+                vexzVenixCarry._lvBoost = nil
+                vexzVenixCarry._lvAtt = nil
             end
             local function setupLV(parent)
-                if ScreamVenixCarry._lvBoost and ScreamVenixCarry._lvBoost.Parent == parent then
+                if vexzVenixCarry._lvBoost and vexzVenixCarry._lvBoost.Parent == parent then
                     return
                 end
                 destroyLV()
                 local attachment = Instance.new("Attachment")
                 attachment.Parent = parent
                 local linearVelocity = Instance.new("LinearVelocity")
-                linearVelocity.Name = "ScreamCarryBoost"
-                attachment.Name = "ScreamCarryAttachment"
+                linearVelocity.Name = "vexzCarryBoost"
+                attachment.Name = "vexzCarryAttachment"
                 linearVelocity.Attachment0 = attachment
                 linearVelocity.VelocityConstraintMode = Enum.VelocityConstraintMode.Plane
                 linearVelocity.PrimaryTangentAxis = _V3new(1, 0, 0)
                 linearVelocity.SecondaryTangentAxis = _V3new(0, 0, 1)
-                linearVelocity.MaxForce = ScreamVenixCarry._maxForce
+                linearVelocity.MaxForce = vexzVenixCarry._maxForce
                 linearVelocity.PlaneVelocity = Vector2.zero
                 linearVelocity.RelativeTo = Enum.ActuatorRelativeTo.World
                 linearVelocity.Parent = parent
-                ScreamVenixCarry._lvAtt = attachment
-                ScreamVenixCarry._lvBoost = linearVelocity
+                vexzVenixCarry._lvAtt = attachment
+                vexzVenixCarry._lvBoost = linearVelocity
                 pcall(function()
                     parent:SetNetworkOwner(LP)
                 end)
             end
-            ScreamVenixCarry.scanSoftStealAnimals = function(self)
+            vexzVenixCarry.scanSoftStealAnimals = function(self)
                 self._softStealAnimals = {}
                 local plots = Workspace:FindFirstChild("Plots")
                 if not plots then
@@ -3941,7 +3941,7 @@ end
                     end
                 end
             end
-            ScreamVenixCarry.startSoftStealScanner = function(callback)
+            vexzVenixCarry.startSoftStealScanner = function(callback)
                 if callback._softStealScanner then
                     return
                 end
@@ -3958,14 +3958,14 @@ end
                     callback:scanSoftStealAnimals()
                 end)
             end
-            ScreamVenixCarry.stopSoftStealScanner = function(self)
+            vexzVenixCarry.stopSoftStealScanner = function(self)
                 self._softStealScanning = false
                 if self._softStealScanner then
                     self._softStealScanner:Disconnect()
                     self._softStealScanner = nil
                 end
             end
-            ScreamVenixCarry.getNearestSoftStealAnimal = function(self, radius)
+            vexzVenixCarry.getNearestSoftStealAnimal = function(self, radius)
                 local character = LP.Character
                 if character then
                     character = character:FindFirstChild("HumanoidRootPart") or character:FindFirstChild("UpperTorso")
@@ -3995,7 +3995,7 @@ end
                 end
                 return animals, bestDistance
             end
-            ScreamVenixCarry.updateMovement = function(self, deltaTime)
+            vexzVenixCarry.updateMovement = function(self, deltaTime)
                 local character = LP.Character
                 if not character then
                     return
@@ -4106,10 +4106,10 @@ end
                         or self._batAimbotToggled
                     )
                 then
-                    if not ScreamVenixCarry._lvBoost or ScreamVenixCarry._lvBoost.Parent ~= humanoidRootPart then
+                    if not vexzVenixCarry._lvBoost or vexzVenixCarry._lvBoost.Parent ~= humanoidRootPart then
                         setupLV(humanoidRootPart)
                     end
-                    local lvBoost = ScreamVenixCarry._lvBoost
+                    local lvBoost = vexzVenixCarry._lvBoost
                     if lvBoost then
                         if not lvBoost.Enabled then
                             lvBoost.Enabled = true
@@ -4143,14 +4143,14 @@ end
                             lvBoost.MaxForce = self._maxForce
                         end
                     end
-                elseif ScreamVenixCarry._lvBoost then
-                    ScreamVenixCarry._lvBoost.PlaneVelocity = Vector2.zero
-                    if ScreamVenixCarry._lvBoost.Enabled then
-                        ScreamVenixCarry._lvBoost.Enabled = false
+                elseif vexzVenixCarry._lvBoost then
+                    vexzVenixCarry._lvBoost.PlaneVelocity = Vector2.zero
+                    if vexzVenixCarry._lvBoost.Enabled then
+                        vexzVenixCarry._lvBoost.Enabled = false
                     end
                 end
             end
-            ScreamVenixCarry.start = function(deltaTime236)
+            vexzVenixCarry.start = function(deltaTime236)
                 if deltaTime236._heartbeatConn then
                     return
                 end
@@ -4173,7 +4173,7 @@ end
                 end
                 print("[CarrySystem] Activado")
             end
-            ScreamVenixCarry.stop = function(self)
+            vexzVenixCarry.stop = function(self)
                 if self._heartbeatConn then
                     self._heartbeatConn:Disconnect()
                     self._heartbeatConn = nil
@@ -4184,28 +4184,28 @@ end
                 print("[CarrySystem] Desactivado")
             end
         end
-    ScreamVenixCarry.setNormalSpeed = function(self, value)
+    vexzVenixCarry.setNormalSpeed = function(self, value)
         self.normalSpeed = _clamp(value, 1, 500)
     end
-    ScreamVenixCarry.setCarrySpeed = function(self, value)
+    vexzVenixCarry.setCarrySpeed = function(self, value)
         self.carrySpeed = _clamp(value, 1, 500)
     end
-    ScreamVenixCarry.setLaggerSpeed = function(self, value)
+    vexzVenixCarry.setLaggerSpeed = function(self, value)
         self.laggerSpeed = _clamp(value, 0.1, 500)
     end
-    ScreamVenixCarry.setLaggerCarrySpeed = function(self, value)
+    vexzVenixCarry.setLaggerCarrySpeed = function(self, value)
         self.laggerCarrySpeed = _clamp(value, 0.1, 500)
     end
-    ScreamVenixCarry.setSoftStealSpeed = function(self, value)
+    vexzVenixCarry.setSoftStealSpeed = function(self, value)
         self.softStealSpeed = _clamp(value, 1, 500)
     end
-    ScreamVenixCarry.setSoftStealRadius = function(self, value)
+    vexzVenixCarry.setSoftStealRadius = function(self, value)
         self.softStealRadius = _clamp(value, 1, 200)
     end
-    ScreamVenixCarry.toggleCarryMode = function(self)
+    vexzVenixCarry.toggleCarryMode = function(self)
         self.speedToggled = not self.speedToggled
     end
-    ScreamVenixCarry.setLaggerMode = function(self, mode)
+    vexzVenixCarry.setLaggerMode = function(self, mode)
         if mode == 0 then
             self.laggerMode = 0
         elseif mode == 1 then
@@ -4214,7 +4214,7 @@ end
             self.laggerMode = 2
         end
     end
-    ScreamVenixCarry.toggleLaggerMode = function(self)
+    vexzVenixCarry.toggleLaggerMode = function(self)
         if self.laggerMode == 0 then
             self.laggerMode = 1
         elseif self.laggerMode == 1 then
@@ -4223,7 +4223,7 @@ end
             self.laggerMode = 0
         end
     end
-    ScreamVenixCarry.setSoftStealEnabled = function(self, softStealEnabled)
+    vexzVenixCarry.setSoftStealEnabled = function(self, softStealEnabled)
         self.softStealEnabled = softStealEnabled
         if softStealEnabled then
             self:startSoftStealScanner()
@@ -4232,13 +4232,13 @@ end
             self.softStealLatched = false
         end
     end
-    ScreamVenixCarry.toggleSoftSteal = function(self)
+    vexzVenixCarry.toggleSoftSteal = function(self)
         self:setSoftStealEnabled(not self.softStealEnabled)
     end
-    ScreamVenixCarry.isRunning = function(self)
+    vexzVenixCarry.isRunning = function(self)
         return self._heartbeatConn ~= nil
     end
-    ScreamVenixCarry.getCurrentSpeed = function(self)
+    vexzVenixCarry.getCurrentSpeed = function(self)
         return self:getActiveSpeed()
     end
 
@@ -4663,7 +4663,7 @@ local function executeSteal(prompt, podName)
             autoStealLastActivity = _tick()
             updateStealProgress(0, "READY")
         end
-        if not success then warn("[Screamhub Auto Steal] " .. tostring(err)) end
+        if not success then warn("[vexzhub Auto Steal] " .. tostring(err)) end
     end)
 end
 function startAutoSteal()
@@ -4891,7 +4891,7 @@ local function stopInstaReset()
     end
     _irResetCooldown = false
     _irCurrentCharacter = nil
-    _G.__ScreamInstaResetInProgress = false
+    _G.__vexzInstaResetInProgress = false
     if setInstaResetVisual then pcall(setInstaResetVisual, false) end
 end
 
@@ -4900,14 +4900,14 @@ function doInstaReset()
     _irResetCooldown = true
     _irResetSuccessful = false
     _irStopSequence = false
-    _G.__ScreamInstaResetInProgress = true
+    _G.__vexzInstaResetInProgress = true
     if setInstaResetVisual then pcall(setInstaResetVisual, true) end
 
     local character = LP.Character
     local humanoid = character and character:FindFirstChildOfClass("Humanoid")
     if not character or not humanoid then
         _irResetCooldown = false
-        _G.__ScreamInstaResetInProgress = false
+        _G.__vexzInstaResetInProgress = false
         if setInstaResetVisual then pcall(setInstaResetVisual, false) end
         return
     end
@@ -4971,7 +4971,7 @@ function doInstaReset()
         _irResetThread = nil
         _irCurrentCharacter = nil
         _irStopSequence = false
-        _G.__ScreamInstaResetInProgress = false
+        _G.__vexzInstaResetInProgress = false
         if setInstaResetVisual then pcall(setInstaResetVisual, false) end
     end)
 end
@@ -5002,7 +5002,7 @@ task.spawn(function()
             end
             _irResetCooldown = false
             _irCurrentCharacter = nil
-            _G.__ScreamInstaResetInProgress = false
+            _G.__vexzInstaResetInProgress = false
             if setInstaResetVisual then pcall(setInstaResetVisual, false) end
         end
     end
@@ -6277,7 +6277,7 @@ function setupSpeedIndicator(char)
     border.Color = getThemeColor()
     border.Transparency = 0.62
     border.Thickness = 1
-    ScreamUI.speedStroke = border
+    vexzUI.speedStroke = border
     speedLabel = Instance.new("TextLabel", card)
     speedLabel.Name = "SpeedLabel"
     speedLabel.Size = UDim2.new(1, -12, 1, 0)
@@ -6307,7 +6307,7 @@ function setupSpeedIndicator(char)
     text.TextStrokeTransparency = 0.2
     text.Font = Enum.Font.GothamBold
     text.TextSize = 15
-    ScreamUI.discordLabel = text
+    vexzUI.discordLabel = text
 
 end
 
@@ -8274,7 +8274,7 @@ function applyHideButtons(state)
                 local scale = child:FindFirstChildOfClass("UIScale")
                 local gen = (child:GetAttribute("FXHideGen") or 0) + 1
                 child:SetAttribute("FXHideGen", gen)
-                if scale and ScreamFX and ScreamFX.enabled() then
+                if scale and vexzFX and vexzFX.enabled() then
                     if state then
                         local shrink = TS:Create(scale, TweenInfo.new(0.2, Enum.EasingStyle.Quint, Enum.EasingDirection.In), {Scale = 0})
                         shrink.Completed:Connect(function()
@@ -8303,44 +8303,44 @@ function toggleHideButtons(on)
     saveAllSettings(true)
 end
 
-function ScreamUI.new(class, parent, props)
+function vexzUI.new(class, parent, props)
     local object = Instance.new(class)
     for key, value in pairs(props or {}) do object[key] = value end
     object.Parent = parent
     return object
 end
-function ScreamUI.round(object, radius)
+function vexzUI.round(object, radius)
     local corner = object:FindFirstChildOfClass("UICorner") or Instance.new("UICorner", object)
     corner.CornerRadius = UDim.new(0, radius or 12)
     return corner
 end
-function ScreamUI.stroke(object, color, transparency, thickness)
-    return ScreamUI.new("UIStroke", object, {Color = color, Transparency = transparency or 0,
+function vexzUI.stroke(object, color, transparency, thickness)
+    return vexzUI.new("UIStroke", object, {Color = color, Transparency = transparency or 0,
         Thickness = thickness or 1, ApplyStrokeMode = Enum.ApplyStrokeMode.Border})
 end
-function ScreamUI.text(parent, text, position, size, fontSize, color, z)
-    return ScreamUI.new("TextLabel", parent, {Text = text, Position = position, Size = size,
+function vexzUI.text(parent, text, position, size, fontSize, color, z)
+    return vexzUI.new("TextLabel", parent, {Text = text, Position = position, Size = size,
         BackgroundTransparency = 1, TextColor3 = color or Color3.fromRGB(245, 241, 235),
         Font = Enum.Font.GothamMedium, TextSize = fontSize or 12, ZIndex = z or 8,
         TextXAlignment = Enum.TextXAlignment.Left, TextTruncate = Enum.TextTruncate.AtEnd})
 end
-function ScreamUI.sectionIcon(parent, name, position, size, color, z)
-    local root = ScreamUI.new("Frame", parent, {Name = "SectionIcon", Position = position,
+function vexzUI.sectionIcon(parent, name, position, size, color, z)
+    local root = vexzUI.new("Frame", parent, {Name = "SectionIcon", Position = position,
         Size = UDim2.fromOffset(size, size), BackgroundTransparency = 1, ZIndex = z})
     local function line(x1, y1, x2, y2, thickness)
         local dx, dy = x2 - x1, y2 - y1
-        local ink = ScreamUI.new("Frame", root, {Name = "IconInk", AnchorPoint = Vector2.new(0.5, 0.5),
+        local ink = vexzUI.new("Frame", root, {Name = "IconInk", AnchorPoint = Vector2.new(0.5, 0.5),
             Position = UDim2.fromScale((x1 + x2) / 2, (y1 + y2) / 2),
             Size = UDim2.fromOffset(math.sqrt(dx * dx + dy * dy) * size, thickness or 1.6),
             BackgroundColor3 = color, BorderSizePixel = 0, Rotation = math.deg(math.atan2(dy, dx)), ZIndex = z})
-        ScreamUI.round(ink, 2)
+        vexzUI.round(ink, 2)
     end
     local function box(x, y, w, h, radius, solid)
-        local object = ScreamUI.new("Frame", root, {Name = "IconInk", Position = UDim2.fromScale(x, y),
+        local object = vexzUI.new("Frame", root, {Name = "IconInk", Position = UDim2.fromScale(x, y),
             Size = UDim2.fromScale(w, h), BackgroundColor3 = color, BackgroundTransparency = solid and 0 or 1,
             BorderSizePixel = 0, ZIndex = z})
-        ScreamUI.round(object, radius)
-        if not solid then ScreamUI.stroke(object, color, 0, 1.4) end
+        vexzUI.round(object, radius)
+        if not solid then vexzUI.stroke(object, color, 0, 1.4) end
         return object
     end
     if name == "Speed" then
@@ -8370,7 +8370,7 @@ function ScreamUI.sectionIcon(parent, name, position, size, color, z)
     end
     return root
 end
-function ScreamUI.colorSectionIcon(root, color)
+function vexzUI.colorSectionIcon(root, color)
     if not root then return end
     for _, object in ipairs(root:GetDescendants()) do
         if object:IsA("Frame") and object.Name == "IconInk" then object.BackgroundColor3 = color end
@@ -8378,7 +8378,7 @@ function ScreamUI.colorSectionIcon(root, color)
     end
 end
 
-function ScreamUI.fit()
+function vexzUI.fit()
     if not mainUIScale or not main or not main.Parent then return end
     local cam = Workspace.CurrentCamera
     if not cam then return end
@@ -8386,10 +8386,10 @@ function ScreamUI.fit()
     local width = 350
     local scale = math.max(0.25, math.min(uiScaleValue / 100, (viewport.X - 24) / width, (viewport.Y - 24) / 460))
     local height = math.min(570, math.floor((viewport.Y - 24) / scale))
-    ScreamUI.targetScale = scale
-    ScreamUI.width, ScreamUI.height = width, height
-    if ScreamUI.mainAnimating then ScreamUI.animBaseScale = scale end
-    if not ScreamUI.mainAnimating then
+    vexzUI.targetScale = scale
+    vexzUI.width, vexzUI.height = width, height
+    if vexzUI.mainAnimating then vexzUI.animBaseScale = scale end
+    if not vexzUI.mainAnimating then
         mainUIScale.Scale = scale
         main.Size = UDim2.fromOffset(width, height)
         local size = Vector2.new(width * mainUIScale.Scale, height * mainUIScale.Scale)
@@ -8397,12 +8397,12 @@ function ScreamUI.fit()
         main.Position = UDim2.fromOffset(_clamp(point.X, 8, math.max(8, viewport.X - size.X - 8)),
             _clamp(point.Y, 8, math.max(8, viewport.Y - size.Y - 8)))
     end
-    if pbFrame and pbFrame.Parent and ScreamUI.hudScale then
+    if pbFrame and pbFrame.Parent and vexzUI.hudScale then
         local hudScale = math.min(1, (viewport.X - 24) / 300)
-        ScreamUI.hudScale.Scale = hudScale
+        vexzUI.hudScale.Scale = hudScale
         local hudWidth, hudHeight = 300 * hudScale, 78 * hudScale
         if not savedProgressBarPos then
-            -- bottom center (Scream style)
+            -- bottom center (vexz style)
             pbFrame.Position = UDim2.fromOffset(
                 (viewport.X - hudWidth) / 2,
                 viewport.Y - hudHeight - 24
@@ -8415,8 +8415,8 @@ function ScreamUI.fit()
     end
 
 end
-function ScreamUI.effectsLoop(root)
-    local state = ScreamUI
+function vexzUI.effectsLoop(root)
+    local state = vexzUI
     if state.effectConn then state.effectConn:Disconnect() end
     local accumulator, elapsed = 0, 0
     local connection
@@ -8461,10 +8461,10 @@ function ScreamUI.effectsLoop(root)
 end
 
 -- ============================================================
--- SCREAM FX — moteur d'animations UI (refonte violet / noir)
--- Toutes les animations respectent le toggle "UI Effects" (ScreamUI.effects)
+-- vexz FX — moteur d'animations UI (refonte violet / noir)
+-- Toutes les animations respectent le toggle "UI Effects" (vexzUI.effects)
 -- ============================================================
-ScreamFX = {
+vexzFX = {
     accentRefs = {},
     serial = 0,
     fadeCache = setmetatable({}, {__mode = "k"}),
@@ -8481,16 +8481,16 @@ ScreamFX = {
     DIM = Color3.fromRGB(98, 88, 120),
 }
 
-function ScreamFX.enabled()
-    return ScreamUI.effects ~= false
+function vexzFX.enabled()
+    return vexzUI.effects ~= false
 end
 
-function ScreamFX.tween(object, duration, props, style, direction, delayTime)
+function vexzFX.tween(object, duration, props, style, direction, delayTime)
     if not object then return nil end
     local ok, tween = pcall(function()
-        return TS:Create(object, TweenInfo.new(ScreamFX.enabled() and duration or 0.01,
+        return TS:Create(object, TweenInfo.new(vexzFX.enabled() and duration or 0.01,
             style or Enum.EasingStyle.Quint, direction or Enum.EasingDirection.Out, 0, false,
-            ScreamFX.enabled() and (delayTime or 0) or 0), props)
+            vexzFX.enabled() and (delayTime or 0) or 0), props)
     end)
     if ok and tween then
         tween:Play()
@@ -8500,16 +8500,16 @@ function ScreamFX.tween(object, duration, props, style, direction, delayTime)
 end
 
 -- Couleur d'accent enregistrée : se met à jour toute seule quand le thème change
-function ScreamFX.accent(object, apply)
+function vexzFX.accent(object, apply)
     if not object then return end
     local ref = {object = object, apply = apply}
-    table.insert(ScreamFX.accentRefs, ref)
+    table.insert(vexzFX.accentRefs, ref)
     pcall(apply, object, getThemeColor())
     return ref
 end
 
-function ScreamFX.refreshAccent(color)
-    local refs = ScreamFX.accentRefs
+function vexzFX.refreshAccent(color)
+    local refs = vexzFX.accentRefs
     for i = #refs, 1, -1 do
         local ref = refs[i]
         if not ref.object or not ref.object.Parent then
@@ -8518,7 +8518,7 @@ function ScreamFX.refreshAccent(color)
             pcall(ref.apply, ref.object, color)
         end
     end
-    for pill in pairs(ScreamFX.pills) do
+    for pill in pairs(vexzFX.pills) do
         if pill.Parent and pill:GetAttribute("FXOn") == true then
             pill.BackgroundColor3 = color
             local stroke = pill:FindFirstChildOfClass("UIStroke")
@@ -8527,7 +8527,7 @@ function ScreamFX.refreshAccent(color)
     end
 end
 
-function ScreamFX.pointer(input)
+function vexzFX.pointer(input)
     if input and input.UserInputType == Enum.UserInputType.Touch then
         local inset = Vector2.new(0, 0)
         pcall(function() inset = game:GetService("GuiService"):GetGuiInset() end)
@@ -8539,8 +8539,8 @@ function ScreamFX.pointer(input)
 end
 
 -- Onde de clic (ripple) à l'endroit touché
-function ScreamFX.ripple(host, screenPos, color)
-    if not ScreamFX.enabled() or not host or not host.Parent then return end
+function vexzFX.ripple(host, screenPos, color)
+    if not vexzFX.enabled() or not host or not host.Parent then return end
     local abs, size = host.AbsolutePosition, host.AbsoluteSize
     if size.X < 2 or size.Y < 2 then return end
     local rx, ry = 0.5, 0.5
@@ -8567,7 +8567,7 @@ function ScreamFX.ripple(host, screenPos, color)
 end
 
 -- Effet "appui" (le bouton doit avoir AnchorPoint 0.5 pour rétrécir vers son centre)
-function ScreamFX.press(button, target)
+function vexzFX.press(button, target)
     target = target or button
     local scale = target:FindFirstChild("FXPress")
     if not scale then
@@ -8576,10 +8576,10 @@ function ScreamFX.press(button, target)
         scale.Parent = target
     end
     local function release()
-        ScreamFX.tween(scale, 0.38, {Scale = 1}, Enum.EasingStyle.Back)
+        vexzFX.tween(scale, 0.38, {Scale = 1}, Enum.EasingStyle.Back)
     end
     button.MouseButton1Down:Connect(function()
-        ScreamFX.tween(scale, 0.08, {Scale = 0.94}, Enum.EasingStyle.Quad)
+        vexzFX.tween(scale, 0.08, {Scale = 0.94}, Enum.EasingStyle.Quad)
     end)
     button.MouseButton1Up:Connect(release)
     button.MouseLeave:Connect(release)
@@ -8600,14 +8600,14 @@ local function _fxFadeProps(object)
 end
 
 -- Fondu d'un arbre d'objets (show = apparition, sinon disparition puis restauration)
-function ScreamFX.fade(root, show, duration, delayTime, onDone)
+function vexzFX.fade(root, show, duration, delayTime, onDone)
     if not root then return end
-    if not ScreamFX.enabled() then
+    if not vexzFX.enabled() then
         if onDone then onDone() end
         return
     end
-    ScreamFX.serial = ScreamFX.serial + 1
-    local serial = ScreamFX.serial
+    vexzFX.serial = vexzFX.serial + 1
+    local serial = vexzFX.serial
     local entries = {}
     local objects = root:GetDescendants()
     table.insert(objects, 1, root)
@@ -8615,13 +8615,13 @@ function ScreamFX.fade(root, show, duration, delayTime, onDone)
         if string.sub(object.Name, 1, 2) ~= "FX" then
             local props = _fxFadeProps(object)
             if props then
-                local record = ScreamFX.fadeCache[object]
+                local record = vexzFX.fadeCache[object]
                 local targets = record and record.targets
                 if not targets then
                     targets = {}
                     for _, prop in ipairs(props) do targets[prop] = object[prop] end
                 end
-                ScreamFX.fadeCache[object] = {targets = targets, serial = serial}
+                vexzFX.fadeCache[object] = {targets = targets, serial = serial}
                 if show then
                     for prop, value in pairs(targets) do
                         if value < 1 then object[prop] = 1 end
@@ -8633,11 +8633,11 @@ function ScreamFX.fade(root, show, duration, delayTime, onDone)
     end
     local function run()
         for _, entry in ipairs(entries) do
-            local record = ScreamFX.fadeCache[entry.object]
+            local record = vexzFX.fadeCache[entry.object]
             if record and record.serial == serial and entry.object.Parent then
                 local goal = {}
                 for prop, value in pairs(entry.targets) do goal[prop] = show and value or 1 end
-                ScreamFX.tween(entry.object, duration, goal, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+                vexzFX.tween(entry.object, duration, goal, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
             end
         end
     end
@@ -8645,12 +8645,12 @@ function ScreamFX.fade(root, show, duration, delayTime, onDone)
     task.delay((delayTime or 0) + duration + 0.03, function()
         if not show and onDone then pcall(onDone) end
         for _, entry in ipairs(entries) do
-            local record = ScreamFX.fadeCache[entry.object]
+            local record = vexzFX.fadeCache[entry.object]
             if record and record.serial == serial then
                 if not show and entry.object.Parent then
                     for prop, value in pairs(entry.targets) do entry.object[prop] = value end
                 end
-                ScreamFX.fadeCache[entry.object] = nil
+                vexzFX.fadeCache[entry.object] = nil
             end
         end
         if show and onDone then pcall(onDone) end
@@ -8658,7 +8658,7 @@ function ScreamFX.fade(root, show, duration, delayTime, onDone)
 end
 
 -- Ouverture / fermeture "pop" d'un panneau (échelle + fondu)
-function ScreamFX.pop(frame, open, onDone)
+function vexzFX.pop(frame, open, onDone)
     if not frame then return end
     local scale = frame:FindFirstChild("FXScale")
     if not scale then
@@ -8666,23 +8666,23 @@ function ScreamFX.pop(frame, open, onDone)
         scale.Name = "FXScale"
         scale.Parent = frame
     end
-    ScreamFX.popGen[frame] = (ScreamFX.popGen[frame] or 0) + 1
-    local gen = ScreamFX.popGen[frame]
-    if not ScreamFX.enabled() then
+    vexzFX.popGen[frame] = (vexzFX.popGen[frame] or 0) + 1
+    local gen = vexzFX.popGen[frame]
+    if not vexzFX.enabled() then
         scale.Scale = 1
         if onDone then onDone() end
         return
     end
     if open then
         scale.Scale = 0.86
-        ScreamFX.tween(scale, 0.42, {Scale = 1}, Enum.EasingStyle.Back)
-        ScreamFX.fade(frame, true, 0.22, 0, function()
-            if ScreamFX.popGen[frame] == gen and onDone then onDone() end
+        vexzFX.tween(scale, 0.42, {Scale = 1}, Enum.EasingStyle.Back)
+        vexzFX.fade(frame, true, 0.22, 0, function()
+            if vexzFX.popGen[frame] == gen and onDone then onDone() end
         end)
     else
-        ScreamFX.tween(scale, 0.2, {Scale = 0.9}, Enum.EasingStyle.Quint, Enum.EasingDirection.In)
-        ScreamFX.fade(frame, false, 0.18, 0, function()
-            if ScreamFX.popGen[frame] ~= gen then return end
+        vexzFX.tween(scale, 0.2, {Scale = 0.9}, Enum.EasingStyle.Quint, Enum.EasingDirection.In)
+        vexzFX.fade(frame, false, 0.18, 0, function()
+            if vexzFX.popGen[frame] ~= gen then return end
             if onDone then onDone() end
             scale.Scale = 1
         end)
@@ -8690,8 +8690,8 @@ function ScreamFX.pop(frame, open, onDone)
 end
 
 -- Apparition en cascade des lignes visibles d'une page
-function ScreamFX.staggerPage(page)
-    if not ScreamFX.enabled() or not page then return end
+function vexzFX.staggerPage(page)
+    if not vexzFX.enabled() or not page then return end
     local rows = {}
     for _, child in ipairs(page:GetChildren()) do
         if child:IsA("GuiObject") and child.Visible then table.insert(rows, child) end
@@ -8712,17 +8712,17 @@ function ScreamFX.staggerPage(page)
     end
     for i, row in ipairs(visible) do
         if i > 16 then break end
-        ScreamFX.fade(row, true, 0.26, (i - 1) * 0.022)
+        vexzFX.fade(row, true, 0.26, (i - 1) * 0.022)
     end
 end
 
 -- Notifications (toasts) en bas à droite
-function ScreamFX.notify(title, text, kind, duration)
+function vexzFX.notify(title, text, kind, duration)
     duration = duration or 2.6
-    local holderGui = ScreamFX.notifyGui
+    local holderGui = vexzFX.notifyGui
     if not holderGui or not holderGui.Parent then
         holderGui = Instance.new("ScreenGui")
-        holderGui.Name = "ScreamHubNotify"
+        holderGui.Name = "vexzHubNotify"
         holderGui.ResetOnSpawn = false
         holderGui.IgnoreGuiInset = true
         holderGui.DisplayOrder = 250
@@ -8740,12 +8740,12 @@ function ScreamFX.notify(title, text, kind, duration)
         layout.SortOrder = Enum.SortOrder.LayoutOrder
         layout.VerticalAlignment = Enum.VerticalAlignment.Bottom
         layout.Padding = UDim.new(0, 8)
-        ScreamFX.notifyGui = holderGui
-        ScreamFX.notifyOrder = 0
+        vexzFX.notifyGui = holderGui
+        vexzFX.notifyOrder = 0
     end
     local list = holderGui:FindFirstChild("List")
     if not list then return end
-    ScreamFX.notifyOrder = (ScreamFX.notifyOrder or 0) + 1
+    vexzFX.notifyOrder = (vexzFX.notifyOrder or 0) + 1
     local accent = getThemeColor()
     if kind == "error" then accent = Color3.fromRGB(255, 84, 112)
     elseif kind == "success" then accent = Color3.fromRGB(120, 235, 170) end
@@ -8754,13 +8754,13 @@ function ScreamFX.notify(title, text, kind, duration)
     slot.Size = UDim2.new(1, 0, 0, 0)
     slot.BackgroundTransparency = 1
     slot.ClipsDescendants = false
-    slot.LayoutOrder = ScreamFX.notifyOrder
+    slot.LayoutOrder = vexzFX.notifyOrder
     slot.Parent = list
     local card = Instance.new("Frame")
     card.Name = "Card"
     card.Size = UDim2.new(1, 0, 0, 58)
     card.Position = UDim2.new(1.15, 0, 0, 0)
-    card.BackgroundColor3 = ScreamFX.PANEL
+    card.BackgroundColor3 = vexzFX.PANEL
     card.BorderSizePixel = 0
     card.ClipsDescendants = true
     card.Parent = slot
@@ -8771,7 +8771,7 @@ function ScreamFX.notify(title, text, kind, duration)
     stroke.Thickness = 1.2
     local grad = Instance.new("UIGradient", card)
     grad.Rotation = 0
-    grad.Color = ColorSequence.new(accent:Lerp(ScreamFX.PANEL, 0.82), ScreamFX.PANEL)
+    grad.Color = ColorSequence.new(accent:Lerp(vexzFX.PANEL, 0.82), vexzFX.PANEL)
     local bar = Instance.new("Frame", card)
     bar.Size = UDim2.new(0, 3, 1, -16)
     bar.Position = UDim2.fromOffset(8, 8)
@@ -8784,17 +8784,17 @@ function ScreamFX.notify(title, text, kind, duration)
     titleLabel.Size = UDim2.new(1, -28, 0, 18)
     titleLabel.Font = Enum.Font.GothamBlack
     titleLabel.TextSize = 12
-    titleLabel.TextColor3 = ScreamFX.TEXT
+    titleLabel.TextColor3 = vexzFX.TEXT
     titleLabel.TextXAlignment = Enum.TextXAlignment.Left
     titleLabel.TextTruncate = Enum.TextTruncate.AtEnd
-    titleLabel.Text = tostring(title or "SCREAMHUB")
+    titleLabel.Text = tostring(title or "vexzHUB")
     local bodyLabel = Instance.new("TextLabel", card)
     bodyLabel.BackgroundTransparency = 1
     bodyLabel.Position = UDim2.fromOffset(20, 26)
     bodyLabel.Size = UDim2.new(1, -28, 0, 22)
     bodyLabel.Font = Enum.Font.GothamMedium
     bodyLabel.TextSize = 11
-    bodyLabel.TextColor3 = ScreamFX.MUTED
+    bodyLabel.TextColor3 = vexzFX.MUTED
     bodyLabel.TextXAlignment = Enum.TextXAlignment.Left
     bodyLabel.TextYAlignment = Enum.TextYAlignment.Top
     bodyLabel.TextWrapped = true
@@ -8807,7 +8807,7 @@ function ScreamFX.notify(title, text, kind, duration)
     timer.BackgroundColor3 = accent
     timer.BackgroundTransparency = 0.25
     timer.BorderSizePixel = 0
-    local fast = not ScreamFX.enabled()
+    local fast = not vexzFX.enabled()
     TS:Create(slot, TweenInfo.new(fast and 0.01 or 0.3, Enum.EasingStyle.Quint), {Size = UDim2.new(1, 0, 0, 58)}):Play()
     TS:Create(card, TweenInfo.new(fast and 0.01 or 0.45, Enum.EasingStyle.Back), {Position = UDim2.new(0, 0, 0, 0)}):Play()
     TS:Create(timer, TweenInfo.new(duration, Enum.EasingStyle.Linear), {Size = UDim2.new(0, 0, 0, 2)}):Play()
@@ -8821,7 +8821,7 @@ function ScreamFX.notify(title, text, kind, duration)
         shrink:Play()
     end)
 end
-_G.__ScreamNotify = ScreamFX.notify
+_G.__vexzNotify = vexzFX.notify
 
 function paintFloatingBtn(button, active)
     if not button or not button.Parent then return end
@@ -8926,7 +8926,7 @@ end
 
 _G.__RivalHubSpeedEngine = _G.__RivalHubSpeedEngine or {}
 do
-    -- Speed system from speedundetect (Katana) integrated into Scream Hub
+    -- Speed system from speedundetect (Katana) integrated into vexz Hub
     local function blocked(hum)
         if not hum or hum.Health <= 0 then return true end
         if _isRagdollState(hum) then return true end
@@ -8966,12 +8966,12 @@ do
     end
     local function stop()
         if _G.__RivalHubSpeedEngine.conn then _G.__RivalHubSpeedEngine.conn:Disconnect(); _G.__RivalHubSpeedEngine.conn = nil end
-        ScreamVenixCarry:stop()
+        vexzVenixCarry:stop()
         lastMoveDir = _V3zero
     end
     local function start()
         stop()
-        if useVenixCarryEngine then ScreamVenixCarry:start() end
+        if useVenixCarryEngine then vexzVenixCarry:start() end
         _G.__RivalHubSpeedEngine.conn = RunService.RenderStepped:Connect(function()
             if _mySession ~= _G.RivalHubSession then stop(); return end
             applyNow()
@@ -9034,7 +9034,7 @@ function setupMovementAndIndicators(char)
             if stealHud.fpsVal and stealHud.fpsVal.Parent then stealHud.fpsVal.Text = tostring(fps) end
             if stealHud.pingVal and stealHud.pingVal.Parent then stealHud.pingVal.Text = pingText .. "ms" end
             if stealHud.mode and stealHud.mode.Parent then stealHud.mode.Text = autoStealMode end
-            if ScreamUI.footerStats and ScreamUI.footerStats.Parent then ScreamUI.footerStats.Text = stealHud.statsText end
+            if vexzUI.footerStats and vexzUI.footerStats.Parent then vexzUI.footerStats.Text = stealHud.statsText end
         end
         local char2 = LP.Character
         if not char2 then return end
@@ -9189,10 +9189,10 @@ function buildConfigTable()
         infiniteJumpMode = InfiniteJump.mode == "manual" and "manual" or "hold",
         autoStealMode = autoStealMode,
         useVenixCarryEngine = useVenixCarryEngine,
-        softCarry = ScreamVenixCarry.softStealEnabled,
-        softCarrySpeed = ScreamVenixCarry.softStealSpeed,
-        softCarryRadius = ScreamVenixCarry.softStealRadius,
-        uiEffects = ScreamUI.effects,
+        softCarry = vexzVenixCarry.softStealEnabled,
+        softCarrySpeed = vexzVenixCarry.softStealSpeed,
+        softCarryRadius = vexzVenixCarry.softStealRadius,
+        uiEffects = vexzUI.effects,
         mobileButtonsLocked = mobileButtonsLocked,
         batV2 = _G.__RivalHubIsBatV2 and _G.__RivalHubIsBatV2() or false,
     }
@@ -9329,7 +9329,7 @@ end)
 do
     local readFn, writeFn = resolveRivalHubFileApi()
     if readFn and writeFn then
-        local legacyPaths = {"SCREAMHUB.json"}
+        local legacyPaths = {"vexzHUB.json"}
 
         local okNew, _ = pcall(readFn, CONFIG_FILE)
         if not okNew then
@@ -9412,10 +9412,10 @@ function loadAllSettings()
     autoRightEnabled = boolOr(data.autoRight, false)
     setAutoStealMode(data.autoStealMode or "75")
     useVenixCarryEngine = boolOr(data.useVenixCarryEngine, false)
-    ScreamVenixCarry.softStealSpeed = _clamp(num(data.softCarrySpeed, 30), 1, 500)
-    ScreamVenixCarry.softStealRadius = _clamp(num(data.softCarryRadius, 10), 1, 200)
-    ScreamVenixCarry:setSoftStealEnabled(boolOr(data.softCarry, false))
-    ScreamUI.effects = boolOr(data.uiEffects, true)
+    vexzVenixCarry.softStealSpeed = _clamp(num(data.softCarrySpeed, 30), 1, 500)
+    vexzVenixCarry.softStealRadius = _clamp(num(data.softCarryRadius, 10), 1, 200)
+    vexzVenixCarry:setSoftStealEnabled(boolOr(data.softCarry, false))
+    vexzUI.effects = boolOr(data.uiEffects, true)
     mobileButtonsLocked = boolOr(data.mobileButtonsLocked, false)
     if _G.__RivalHubRefreshSpeedEngine then pcall(_G.__RivalHubRefreshSpeedEngine) end
     InfiniteJump.mode = data.infiniteJumpMode == "manual" and "manual" or "hold"
@@ -9624,10 +9624,10 @@ function forceResetUI()
     safeSet(setAntiRagVisual, false)
     safeSet(infJumpSetVisual, false)
     if autoStealModeBtn then autoStealModeBtn.Text = autoStealMode end
-    if ScreamUI.motorLabel then ScreamUI.motorLabel.Text = "Direct" end
-    if ScreamUI.carrySetter then ScreamUI.carrySetter(false) end
-    if ScreamUI.effectsSetter then ScreamUI.effectsSetter(ScreamUI.effects) end
-    if ScreamUI.lockButtonsSetter then ScreamUI.lockButtonsSetter(false) end
+    if vexzUI.motorLabel then vexzUI.motorLabel.Text = "Direct" end
+    if vexzUI.carrySetter then vexzUI.carrySetter(false) end
+    if vexzUI.effectsSetter then vexzUI.effectsSetter(vexzUI.effects) end
+    if vexzUI.lockButtonsSetter then vexzUI.lockButtonsSetter(false) end
     applyBackgroundMode(backgroundMode)
     if _G.__RivalHubRefreshSpeedEngine then pcall(_G.__RivalHubRefreshSpeedEngine) end
     safeSet(mobSetBatV2, false)
@@ -9697,7 +9697,7 @@ function resetFloatingPositions()
         savedProgressBarPos = nil
     end
     savedMobilePanelPos = nil
-    if ScreamUI.fit then ScreamUI.fit() end
+    if vexzUI.fit then vexzUI.fit() end
 end
 
 function resetToFactoryDefaults()
@@ -9746,11 +9746,11 @@ function resetToFactoryDefaults()
         CONFIG.AUTO_STEAL_ENABLED = false
         setAutoStealMode("75")
         useVenixCarryEngine = false
-        ScreamVenixCarry:stop()
-        ScreamVenixCarry.softStealEnabled = false
-        ScreamVenixCarry.softStealSpeed = 30
-        ScreamVenixCarry.softStealRadius = 10
-        ScreamUI.effects = true
+        vexzVenixCarry:stop()
+        vexzVenixCarry.softStealEnabled = false
+        vexzVenixCarry.softStealSpeed = 30
+        vexzVenixCarry.softStealRadius = 10
+        vexzUI.effects = true
         if _G._rivalHubStealModeSetter then pcall(_G._rivalHubStealModeSetter, "V1") end
         BAT_AIMBOT_SPEED = 55
         BYPASS_AIMBOT_SPEED = BAT_AIMBOT_SPEED
@@ -9759,7 +9759,7 @@ function resetToFactoryDefaults()
         if batVersionLabel then batVersionLabel.Text = "V1" end
         dropMode = 1; stretchEnabled = false; stretchFOV = 120
         uiScaleValue = 90
-        if ScreamUI.fit then ScreamUI.fit() end
+        if vexzUI.fit then vexzUI.fit() end
         if pbScale then pbScale.Scale = 1 end
         espEnabled = false; espLineEnabled = false; vividGraphicsEnabled = false; hideButtonsEnabled = false
         katanaSkinEnabled = false
@@ -10028,7 +10028,7 @@ function buildGui()
         local s = _uiSoundPool[kind]
         if not s or not s.Parent then
             s = Instance.new("Sound")
-            s.Name = "ScreamUI_" .. tostring(kind)
+            s.Name = "vexzUI_" .. tostring(kind)
             s.SoundId = id
             s.Volume = 0.55
             s.RollOffMaxDistance = 10000
@@ -10090,13 +10090,13 @@ function buildGui()
             end)
         end
     end
-    _G.__ScreamPlayUiSound = playUiSound
+    _G.__vexzPlayUiSound = playUiSound
 
-    local ROW_BG = ScreamFX.ROW
-    local ROW_BORDER = ScreamFX.BORDER
-    local WHITE = ScreamFX.TEXT
-    local INP = ScreamFX.INPUT
-    local GRAY = ScreamFX.MUTED
+    local ROW_BG = vexzFX.ROW
+    local ROW_BORDER = vexzFX.BORDER
+    local WHITE = vexzFX.TEXT
+    local INP = vexzFX.INPUT
+    local GRAY = vexzFX.MUTED
     local GRAY_ACTIVE = Color3.fromRGB(40, 28, 62)
     local GUI_W, GUI_H = 470, 570
     for _, parent in ipairs({CoreGui, pgui}) do
@@ -10104,138 +10104,138 @@ function buildGui()
             pcall(function() local old = parent:FindFirstChild(name); if old then old:Destroy() end end)
         end
     end
-    gui = ScreamUI.new("ScreenGui", nil, {Name = "RivalHub", ResetOnSpawn = false,
+    gui = vexzUI.new("ScreenGui", nil, {Name = "RivalHub", ResetOnSpawn = false,
         IgnoreGuiInset = true, DisplayOrder = 30, ZIndexBehavior = Enum.ZIndexBehavior.Sibling})
     pcall(function() if syn and syn.protect_gui then syn.protect_gui(gui) end end)
     local ok = pcall(function() gui.Parent = CoreGui end)
     if not ok then gui.Parent = pgui end
 
     -- Halo lumineux derrière la fenêtre (suit sa position / taille)
-    local glow = ScreamUI.new("Frame", gui, {Name = "FXMainGlow", BackgroundTransparency = 1,
+    local glow = vexzUI.new("Frame", gui, {Name = "FXMainGlow", BackgroundTransparency = 1,
         BorderSizePixel = 0, Active = false, ZIndex = 0})
-    ScreamUI.round(glow, 24)
-    ScreamUI.glowStroke = ScreamUI.stroke(glow, getThemeColor(), 0.62, 6)
-    ScreamFX.accent(ScreamUI.glowStroke, function(o, c) o.Color = c end)
-    local glowInner = ScreamUI.new("Frame", glow, {Name = "FXGlowInner", Position = UDim2.fromOffset(4, 4),
+    vexzUI.round(glow, 24)
+    vexzUI.glowStroke = vexzUI.stroke(glow, getThemeColor(), 0.62, 6)
+    vexzFX.accent(vexzUI.glowStroke, function(o, c) o.Color = c end)
+    local glowInner = vexzUI.new("Frame", glow, {Name = "FXGlowInner", Position = UDim2.fromOffset(4, 4),
         Size = UDim2.new(1, -8, 1, -8), BackgroundTransparency = 1, BorderSizePixel = 0, ZIndex = 0})
-    ScreamUI.round(glowInner, 20)
-    ScreamUI.glowInnerStroke = ScreamUI.stroke(glowInner, getThemeColor(), 0.4, 2)
-    ScreamFX.accent(ScreamUI.glowInnerStroke, function(o, c) o.Color = c end)
-    ScreamUI.glowAlpha = 1
+    vexzUI.round(glowInner, 20)
+    vexzUI.glowInnerStroke = vexzUI.stroke(glowInner, getThemeColor(), 0.4, 2)
+    vexzFX.accent(vexzUI.glowInnerStroke, function(o, c) o.Color = c end)
+    vexzUI.glowAlpha = 1
 
-    main = ScreamUI.new("Frame", gui, {Name = "Main", Size = UDim2.fromOffset(GUI_W, GUI_H),
-        Position = UDim2.fromOffset(18, 16), BackgroundColor3 = ScreamFX.BG,
+    main = vexzUI.new("Frame", gui, {Name = "Main", Size = UDim2.fromOffset(GUI_W, GUI_H),
+        Position = UDim2.fromOffset(18, 16), BackgroundColor3 = vexzFX.BG,
         BorderSizePixel = 0, ClipsDescendants = true, Active = true, ZIndex = 1})
-    ScreamUI.round(main, 18)
-    local border = ScreamUI.stroke(main, getThemeColor(), 0.2, 1.4)
+    vexzUI.round(main, 18)
+    local border = vexzUI.stroke(main, getThemeColor(), 0.2, 1.4)
     border.Name = "MainBorder"
-    ScreamUI.borderGrad = ScreamUI.new("UIGradient", border, {Name = "BorderShine", Rotation = 0,
+    vexzUI.borderGrad = vexzUI.new("UIGradient", border, {Name = "BorderShine", Rotation = 0,
         Transparency = NumberSequence.new({NumberSequenceKeypoint.new(0, 0), NumberSequenceKeypoint.new(0.35, 0.7),
             NumberSequenceKeypoint.new(0.65, 0.7), NumberSequenceKeypoint.new(1, 0)})})
-    mainUIScale = ScreamUI.new("UIScale", main, {Scale = uiScaleValue / 100})
-    local bg = ScreamUI.new("ImageLabel", main, {Name = "BackgroundImage", Size = UDim2.fromScale(1, 1),
+    mainUIScale = vexzUI.new("UIScale", main, {Scale = uiScaleValue / 100})
+    local bg = vexzUI.new("ImageLabel", main, {Name = "BackgroundImage", Size = UDim2.fromScale(1, 1),
         Image = "rbxassetid://" .. backgroundImages[backgroundIndex], ImageTransparency = backgroundImageTransparency,
         BackgroundTransparency = 1, ScaleType = Enum.ScaleType.Crop, ZIndex = 0})
-    ScreamUI.round(bg, 18)
-    local veil = ScreamUI.new("Frame", main, {Name = "BackgroundVeil", Size = UDim2.fromScale(1, 1),
+    vexzUI.round(bg, 18)
+    local veil = vexzUI.new("Frame", main, {Name = "BackgroundVeil", Size = UDim2.fromScale(1, 1),
         BackgroundColor3 = Color3.fromRGB(8, 6, 14), BackgroundTransparency = 0.16, BorderSizePixel = 0, ZIndex = 2})
-    ScreamUI.new("UIGradient", veil, {Rotation = 35, Transparency = NumberSequence.new({
+    vexzUI.new("UIGradient", veil, {Rotation = 35, Transparency = NumberSequence.new({
         NumberSequenceKeypoint.new(0, 0.02), NumberSequenceKeypoint.new(0.6, 0.18), NumberSequenceKeypoint.new(1, 0.06)})})
-    ScreamUI.round(veil, 18)
-    local tint = ScreamUI.new("Frame", main, {Name = "AccentTint", Size = UDim2.fromScale(1, 1),
+    vexzUI.round(veil, 18)
+    local tint = vexzUI.new("Frame", main, {Name = "AccentTint", Size = UDim2.fromScale(1, 1),
         BackgroundColor3 = getThemeColor(), BackgroundTransparency = 0.9, BorderSizePixel = 0, ZIndex = 2})
-    ScreamUI.round(tint, 18)
-    ScreamUI.new("UIGradient", tint, {Rotation = 90, Transparency = NumberSequence.new({
+    vexzUI.round(tint, 18)
+    vexzUI.new("UIGradient", tint, {Rotation = 90, Transparency = NumberSequence.new({
         NumberSequenceKeypoint.new(0, 0.55), NumberSequenceKeypoint.new(0.5, 1), NumberSequenceKeypoint.new(1, 0.4)})})
-    ScreamFX.accent(tint, function(o, c) o.BackgroundColor3 = c end)
-    local innerBorder = ScreamUI.new("Frame", main, {Name = "PanelInset", Position = UDim2.fromOffset(3, 3),
+    vexzFX.accent(tint, function(o, c) o.BackgroundColor3 = c end)
+    local innerBorder = vexzUI.new("Frame", main, {Name = "PanelInset", Position = UDim2.fromOffset(3, 3),
         Size = UDim2.new(1, -6, 1, -6), BackgroundTransparency = 1, BorderSizePixel = 0, ZIndex = 3})
-    ScreamUI.round(innerBorder, 15)
-    ScreamUI.stroke(innerBorder, Color3.fromRGB(150, 120, 210), 0.9, 1)
-    local topLight = ScreamUI.new("Frame", main, {Name = "TopLight", Position = UDim2.fromOffset(28, 1),
+    vexzUI.round(innerBorder, 15)
+    vexzUI.stroke(innerBorder, Color3.fromRGB(150, 120, 210), 0.9, 1)
+    local topLight = vexzUI.new("Frame", main, {Name = "TopLight", Position = UDim2.fromOffset(28, 1),
         Size = UDim2.new(1, -56, 0, 1), BackgroundColor3 = getThemeColor(), BorderSizePixel = 0, ZIndex = 4})
-    ScreamUI.new("UIGradient", topLight, {Transparency = NumberSequence.new({
+    vexzUI.new("UIGradient", topLight, {Transparency = NumberSequence.new({
         NumberSequenceKeypoint.new(0, 1), NumberSequenceKeypoint.new(0.5, 0.1), NumberSequenceKeypoint.new(1, 1)})})
-    ScreamFX.accent(topLight, function(o, c) o.BackgroundColor3 = c end)
-    local header = ScreamUI.new("Frame", main, {Name = "ScriptHeader", Position = UDim2.fromOffset(14, 8),
-        Size = UDim2.new(1, -28, 0, 68), BackgroundColor3 = ScreamFX.PANEL,
+    vexzFX.accent(topLight, function(o, c) o.BackgroundColor3 = c end)
+    local header = vexzUI.new("Frame", main, {Name = "ScriptHeader", Position = UDim2.fromOffset(14, 8),
+        Size = UDim2.new(1, -28, 0, 68), BackgroundColor3 = vexzFX.PANEL,
         BorderSizePixel = 0, ClipsDescendants = true, ZIndex = 5})
-    ScreamUI.round(header, 14)
-    local headerStroke = ScreamUI.stroke(header, getThemeColor(), 0.6, 1)
-    ScreamFX.accent(headerStroke, function(o, c) o.Color = c end)
-    ScreamUI.art = ScreamUI.new("ImageLabel", header, {Name = "Scene", Size = UDim2.fromScale(1, 1),
+    vexzUI.round(header, 14)
+    local headerStroke = vexzUI.stroke(header, getThemeColor(), 0.6, 1)
+    vexzFX.accent(headerStroke, function(o, c) o.Color = c end)
+    vexzUI.art = vexzUI.new("ImageLabel", header, {Name = "Scene", Size = UDim2.fromScale(1, 1),
         Image = bg.Image, ImageTransparency = 0.28, BackgroundTransparency = 1, ScaleType = Enum.ScaleType.Crop, ZIndex = 5})
-    local shade = ScreamUI.new("Frame", header, {Name = "ArtworkShade", Size = UDim2.fromScale(1, 1), BorderSizePixel = 0,
+    local shade = vexzUI.new("Frame", header, {Name = "ArtworkShade", Size = UDim2.fromScale(1, 1), BorderSizePixel = 0,
         BackgroundColor3 = Color3.fromRGB(10, 6, 18), BackgroundTransparency = 0.08, ZIndex = 6})
-    ScreamUI.new("UIGradient", shade, {Rotation = 0, Transparency = NumberSequence.new({
+    vexzUI.new("UIGradient", shade, {Rotation = 0, Transparency = NumberSequence.new({
         NumberSequenceKeypoint.new(0, 0.02), NumberSequenceKeypoint.new(0.55, 0.25), NumberSequenceKeypoint.new(1, 0.75)})})
-    scriptLogoRef = ScreamUI.text(header, "SCREAMHUB", UDim2.fromOffset(14, 8), UDim2.fromOffset(280, 40), 30, WHITE, 8)
+    scriptLogoRef = vexzUI.text(header, "vexzHUB", UDim2.fromOffset(14, 8), UDim2.fromOffset(280, 40), 30, WHITE, 8)
     scriptLogoRef.Font = Enum.Font.GothamBlack
     scriptLogoRef.TextTruncate = Enum.TextTruncate.None
     scriptLogoRef.TextScaled = false
-    ScreamUI.titleGradient = ScreamUI.new("UIGradient", scriptLogoRef, {Rotation = 90,
+    vexzUI.titleGradient = vexzUI.new("UIGradient", scriptLogoRef, {Rotation = 90,
         Color = ColorSequence.new(Color3.fromRGB(225, 200, 255), Color3.fromRGB(140, 80, 240))})
-    local titleLine = ScreamUI.new("Frame", header, {Name = "TitleLine", Position = UDim2.fromOffset(16, 48),
+    local titleLine = vexzUI.new("Frame", header, {Name = "TitleLine", Position = UDim2.fromOffset(16, 48),
         Size = UDim2.fromOffset(54, 2), BackgroundColor3 = getThemeColor(), BorderSizePixel = 0, ZIndex = 8})
-    ScreamUI.round(titleLine, 2)
-    ScreamUI.new("UIGradient", titleLine, {Transparency = NumberSequence.new({
+    vexzUI.round(titleLine, 2)
+    vexzUI.new("UIGradient", titleLine, {Transparency = NumberSequence.new({
         NumberSequenceKeypoint.new(0, 0), NumberSequenceKeypoint.new(1, 1)})})
-    ScreamFX.accent(titleLine, function(o, c) o.BackgroundColor3 = c end)
-    local subtitle = ScreamUI.text(header, "PREMIUM HUB", UDim2.fromOffset(78, 42), UDim2.fromOffset(120, 14), 8,
+    vexzFX.accent(titleLine, function(o, c) o.BackgroundColor3 = c end)
+    local subtitle = vexzUI.text(header, "PREMIUM HUB", UDim2.fromOffset(78, 42), UDim2.fromOffset(120, 14), 8,
         Color3.fromRGB(176, 158, 214), 8)
     subtitle.Name = "Subtitle"
     subtitle.Font = Enum.Font.GothamBold
 
-    local close = ScreamUI.new("TextButton", main, {Name = "Close", Size = UDim2.fromOffset(28, 28),
+    local close = vexzUI.new("TextButton", main, {Name = "Close", Size = UDim2.fromOffset(28, 28),
         AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.new(1, -34, 0, 42), Text = "−", TextSize = 20,
         Font = Enum.Font.GothamMedium, TextColor3 = WHITE, BackgroundColor3 = INP, BackgroundTransparency = 0.05,
         BorderSizePixel = 0, AutoButtonColor = false, ZIndex = 18})
-    ScreamUI.round(close, 9)
-    local closeStroke = ScreamUI.stroke(close, ROW_BORDER, 0.3, 1)
-    ScreamFX.press(close)
+    vexzUI.round(close, 9)
+    local closeStroke = vexzUI.stroke(close, ROW_BORDER, 0.3, 1)
+    vexzFX.press(close)
     close.MouseEnter:Connect(function()
-        ScreamFX.tween(close, 0.16, {BackgroundColor3 = getThemeColor()})
-        ScreamFX.tween(closeStroke, 0.16, {Color = getThemeColor(), Transparency = 0})
+        vexzFX.tween(close, 0.16, {BackgroundColor3 = getThemeColor()})
+        vexzFX.tween(closeStroke, 0.16, {Color = getThemeColor(), Transparency = 0})
     end)
     close.MouseLeave:Connect(function()
-        ScreamFX.tween(close, 0.2, {BackgroundColor3 = INP})
-        ScreamFX.tween(closeStroke, 0.2, {Color = ROW_BORDER, Transparency = 0.3})
+        vexzFX.tween(close, 0.2, {BackgroundColor3 = INP})
+        vexzFX.tween(closeStroke, 0.2, {Color = ROW_BORDER, Transparency = 0.3})
     end)
-    miniBtn = ScreamUI.new("TextButton", gui, {Name = "MinimizedFrame", Size = UDim2.fromOffset(150, 46),
+    miniBtn = vexzUI.new("TextButton", gui, {Name = "MinimizedFrame", Size = UDim2.fromOffset(150, 46),
         Position = UDim2.fromOffset(16, 58), Text = "", BackgroundColor3 = Color3.fromRGB(255, 255, 255),
         BorderSizePixel = 0, AutoButtonColor = false, Visible = false, ZIndex = 25})
-    ScreamUI.round(miniBtn, 12)
-    local miniStroke = ScreamUI.stroke(miniBtn, getThemeColor(), 0.25, 1.3)
-    ScreamUI.new("UIGradient", miniBtn, {Rotation = 0, Color = ColorSequence.new(Color3.fromRGB(34, 22, 56), Color3.fromRGB(11, 8, 18))})
-    local miniAccent = ScreamUI.new("Frame", miniBtn, {Name = "Accent", Position = UDim2.fromOffset(10, 10),
+    vexzUI.round(miniBtn, 12)
+    local miniStroke = vexzUI.stroke(miniBtn, getThemeColor(), 0.25, 1.3)
+    vexzUI.new("UIGradient", miniBtn, {Rotation = 0, Color = ColorSequence.new(Color3.fromRGB(34, 22, 56), Color3.fromRGB(11, 8, 18))})
+    local miniAccent = vexzUI.new("Frame", miniBtn, {Name = "Accent", Position = UDim2.fromOffset(10, 10),
         Size = UDim2.fromOffset(4, 26), BackgroundColor3 = getThemeColor(), BorderSizePixel = 0, ZIndex = 26})
-    ScreamUI.round(miniAccent, 2)
-    ScreamFX.accent(miniAccent, function(o, c) o.BackgroundColor3 = c end)
-    local miniTitle = ScreamUI.text(miniBtn, "SCREAMHUB", UDim2.fromOffset(22, 7), UDim2.fromOffset(100, 22), 14, WHITE, 28)
+    vexzUI.round(miniAccent, 2)
+    vexzFX.accent(miniAccent, function(o, c) o.BackgroundColor3 = c end)
+    local miniTitle = vexzUI.text(miniBtn, "vexzHUB", UDim2.fromOffset(22, 7), UDim2.fromOffset(100, 22), 14, WHITE, 28)
     miniTitle.Font = Enum.Font.GothamBlack
     miniTitle.TextTruncate = Enum.TextTruncate.None
-    local miniHint = ScreamUI.text(miniBtn, "TAP TO OPEN", UDim2.fromOffset(22, 25), UDim2.fromOffset(100, 14), 8,
+    local miniHint = vexzUI.text(miniBtn, "TAP TO OPEN", UDim2.fromOffset(22, 25), UDim2.fromOffset(100, 14), 8,
         Color3.fromRGB(170, 150, 210), 28)
     miniHint.Font = Enum.Font.GothamBold
-    local miniArrow = ScreamUI.text(miniBtn, "›", UDim2.new(1, -24, 0, 8), UDim2.fromOffset(17, 30), 22, WHITE, 28)
+    local miniArrow = vexzUI.text(miniBtn, "›", UDim2.new(1, -24, 0, 8), UDim2.fromOffset(17, 30), 22, WHITE, 28)
     miniArrow.Name = "Arrow"
     miniBtn.MouseEnter:Connect(function()
-        ScreamFX.tween(miniArrow, 0.25, {Position = UDim2.new(1, -19, 0, 8)}, Enum.EasingStyle.Back)
-        ScreamFX.tween(miniStroke, 0.2, {Transparency = 0})
+        vexzFX.tween(miniArrow, 0.25, {Position = UDim2.new(1, -19, 0, 8)}, Enum.EasingStyle.Back)
+        vexzFX.tween(miniStroke, 0.2, {Transparency = 0})
     end)
     miniBtn.MouseLeave:Connect(function()
-        ScreamFX.tween(miniArrow, 0.25, {Position = UDim2.new(1, -24, 0, 8)})
-        ScreamFX.tween(miniStroke, 0.2, {Transparency = 0.25})
+        vexzFX.tween(miniArrow, 0.25, {Position = UDim2.new(1, -24, 0, 8)})
+        vexzFX.tween(miniStroke, 0.2, {Transparency = 0.25})
     end)
     miniBackgroundImage = nil
 
     -- Rideau utilisé pendant l'animation d'ouverture / fermeture de la fenêtre
-    local curtain = ScreamUI.new("Frame", main, {Name = "FXCurtain", Size = UDim2.fromScale(1, 1),
+    local curtain = vexzUI.new("Frame", main, {Name = "FXCurtain", Size = UDim2.fromScale(1, 1),
         BackgroundColor3 = Color3.fromRGB(255, 255, 255), BackgroundTransparency = 1, BorderSizePixel = 0,
         Visible = false, Active = false, ZIndex = 200})
-    ScreamUI.round(curtain, 18)
-    ScreamUI.new("UIGradient", curtain, {Rotation = 90, Color = ColorSequence.new(Color3.fromRGB(34, 18, 60), Color3.fromRGB(8, 6, 14))})
-    local fxAlpha = ScreamUI.new("NumberValue", main, {Name = "FXAlpha", Value = 1})
+    vexzUI.round(curtain, 18)
+    vexzUI.new("UIGradient", curtain, {Rotation = 90, Color = ColorSequence.new(Color3.fromRGB(34, 18, 60), Color3.fromRGB(8, 6, 14))})
+    local fxAlpha = vexzUI.new("NumberValue", main, {Name = "FXAlpha", Value = 1})
 
     local function syncGlow()
         if not glow.Parent or not main.Parent then return end
@@ -10243,9 +10243,9 @@ function buildGui()
         local p, s = main.AbsolutePosition, main.AbsoluteSize
         glow.Position = UDim2.fromOffset(p.X - 5, p.Y - 5)
         glow.Size = UDim2.fromOffset(s.X + 10, s.Y + 10)
-        local a = math.clamp(ScreamUI.glowAlpha or 1, 0, 1)
-        if ScreamUI.glowInnerStroke then ScreamUI.glowInnerStroke.Transparency = 1 - 0.6 * a end
-        if ScreamUI.glowStroke and not ScreamUI.effects then ScreamUI.glowStroke.Transparency = 1 - 0.38 * a end
+        local a = math.clamp(vexzUI.glowAlpha or 1, 0, 1)
+        if vexzUI.glowInnerStroke then vexzUI.glowInnerStroke.Transparency = 1 - 0.6 * a end
+        if vexzUI.glowStroke and not vexzUI.effects then vexzUI.glowStroke.Transparency = 1 - 0.38 * a end
     end
     main:GetPropertyChangedSignal("AbsolutePosition"):Connect(syncGlow)
     main:GetPropertyChangedSignal("AbsoluteSize"):Connect(syncGlow)
@@ -10254,16 +10254,16 @@ function buildGui()
 
     local animating, animationId, tween = false, 0, nil
     local function applyAlpha(a)
-        local target = ScreamUI.animBaseScale or mainUIScale.Scale
+        local target = vexzUI.animBaseScale or mainUIScale.Scale
         local k = 0.9 + 0.1 * a
         mainUIScale.Scale = target * k
         local base = _G.__RivalHubMainOriginalPos or main.Position
-        local w, h = (ScreamUI.width or GUI_W) * target, (ScreamUI.height or GUI_H) * target
+        local w, h = (vexzUI.width or GUI_W) * target, (vexzUI.height or GUI_H) * target
         local lift = (1 - math.clamp(a, 0, 1)) * 12
         main.Position = UDim2.new(base.X.Scale, base.X.Offset + w * (1 - k) / 2,
             base.Y.Scale, base.Y.Offset + h * (1 - k) / 2 + lift)
         curtain.BackgroundTransparency = math.clamp(a, 0, 1)
-        ScreamUI.glowAlpha = math.clamp(a, 0, 1)
+        vexzUI.glowAlpha = math.clamp(a, 0, 1)
         syncGlow()
     end
     fxAlpha.Changed:Connect(function(value)
@@ -10271,43 +10271,43 @@ function buildGui()
     end)
     local function finishAnim(open)
         animating = false
-        ScreamUI.mainAnimating = false
+        vexzUI.mainAnimating = false
         curtain.Visible = false
         curtain.BackgroundTransparency = 1
         fxAlpha.Value = open and 1 or 0
-        if ScreamUI.animBaseScale then mainUIScale.Scale = ScreamUI.animBaseScale end
+        if vexzUI.animBaseScale then mainUIScale.Scale = vexzUI.animBaseScale end
         if _G.__RivalHubMainOriginalPos then main.Position = _G.__RivalHubMainOriginalPos end
-        main.Size = UDim2.fromOffset(ScreamUI.width or GUI_W, ScreamUI.height or GUI_H)
-        ScreamUI.glowAlpha = open and 1 or 0
+        main.Size = UDim2.fromOffset(vexzUI.width or GUI_W, vexzUI.height or GUI_H)
+        vexzUI.glowAlpha = open and 1 or 0
         main.Visible = open
         syncGlow()
         if not open then
             miniBtn.Visible = true
-            ScreamFX.pop(miniBtn, true)
+            vexzFX.pop(miniBtn, true)
         end
     end
     local function animate(open)
         animationId = animationId + 1
         local thisId = animationId
         if tween then tween:Cancel() end
-        ScreamUI.guiOpen = open
+        vexzUI.guiOpen = open
         if not animating then
-            ScreamUI.animBaseScale = mainUIScale.Scale
+            vexzUI.animBaseScale = mainUIScale.Scale
             animating = true
             fxAlpha.Value = open and 0 or 1
         end
         animating = true
-        ScreamUI.mainAnimating = true
+        vexzUI.mainAnimating = true
         curtain.Visible = true
         main.Visible = true
         if open and miniBtn.Visible then
-            ScreamFX.pop(miniBtn, false, function()
-                if ScreamUI.guiOpen then miniBtn.Visible = false end
+            vexzFX.pop(miniBtn, false, function()
+                if vexzUI.guiOpen then miniBtn.Visible = false end
             end)
-            if not ScreamFX.enabled() then miniBtn.Visible = false end
+            if not vexzFX.enabled() then miniBtn.Visible = false end
         end
         applyAlpha(fxAlpha.Value)
-        if not ScreamFX.enabled() then
+        if not vexzFX.enabled() then
             finishAnim(open)
             return
         end
@@ -10318,14 +10318,14 @@ function buildGui()
             finishAnim(open)
         end)
         tween:Play()
-        if open and ScreamUI.activeTab and ScreamUI.pages then
-            local page = ScreamUI.pages[ScreamUI.activeTab]
-            if page then task.delay(0.08, function() ScreamFX.staggerPage(page) end) end
+        if open and vexzUI.activeTab and vexzUI.pages then
+            local page = vexzUI.pages[vexzUI.activeTab]
+            if page then task.delay(0.08, function() vexzFX.staggerPage(page) end) end
         end
     end
     showGui = function() animate(true) end
     hideGui = function() animate(false) end
-    ScreamUI.guiOpen = true
+    vexzUI.guiOpen = true
     close.Activated:Connect(hideGui)
     miniBtn.Activated:Connect(showGui)
     _G.__RivalHubMainOriginalPos = main.Position
@@ -10335,67 +10335,67 @@ function buildGui()
     drag(main, 80)
 
     -- Barre d'onglets : indicateur glissant + liste des boutons
-    local tabBar = ScreamUI.new("Frame", main, {Name = "Navigation", Size = UDim2.new(0, 68, 0, 326),
-        Position = UDim2.fromOffset(14, 120), BackgroundColor3 = ScreamFX.PANEL,
+    local tabBar = vexzUI.new("Frame", main, {Name = "Navigation", Size = UDim2.new(0, 68, 0, 326),
+        Position = UDim2.fromOffset(14, 120), BackgroundColor3 = vexzFX.PANEL,
         BackgroundTransparency = 0.08, BorderSizePixel = 0, ZIndex = 14})
-    ScreamUI.round(tabBar, 16)
-    ScreamUI.stroke(tabBar, ROW_BORDER, 0.45, 1)
-    local tabIndicator = ScreamUI.new("Frame", tabBar, {Name = "FXTabIndicator", Size = UDim2.fromOffset(56, 48),
+    vexzUI.round(tabBar, 16)
+    vexzUI.stroke(tabBar, ROW_BORDER, 0.45, 1)
+    local tabIndicator = vexzUI.new("Frame", tabBar, {Name = "FXTabIndicator", Size = UDim2.fromOffset(56, 48),
         Position = UDim2.fromOffset(6, 6), BackgroundColor3 = getThemeColor(), BackgroundTransparency = 0.8,
         BorderSizePixel = 0, ZIndex = 15})
-    ScreamUI.round(tabIndicator, 11)
-    local indicatorStroke = ScreamUI.stroke(tabIndicator, getThemeColor(), 0.3, 1.2)
-    ScreamUI.new("UIGradient", tabIndicator, {Rotation = 90, Transparency = NumberSequence.new({
+    vexzUI.round(tabIndicator, 11)
+    local indicatorStroke = vexzUI.stroke(tabIndicator, getThemeColor(), 0.3, 1.2)
+    vexzUI.new("UIGradient", tabIndicator, {Rotation = 90, Transparency = NumberSequence.new({
         NumberSequenceKeypoint.new(0, 0), NumberSequenceKeypoint.new(1, 0.6)})})
-    local indicatorBar = ScreamUI.new("Frame", tabIndicator, {Name = "FXBar", AnchorPoint = Vector2.new(0, 0.5),
+    local indicatorBar = vexzUI.new("Frame", tabIndicator, {Name = "FXBar", AnchorPoint = Vector2.new(0, 0.5),
         Position = UDim2.new(0, 0, 0.5, 0), Size = UDim2.fromOffset(3, 22), BackgroundColor3 = getThemeColor(),
         BorderSizePixel = 0, ZIndex = 16})
-    ScreamUI.round(indicatorBar, 2)
-    ScreamFX.accent(tabIndicator, function(o, c)
+    vexzUI.round(indicatorBar, 2)
+    vexzFX.accent(tabIndicator, function(o, c)
         o.BackgroundColor3 = c
         indicatorStroke.Color = c
         indicatorBar.BackgroundColor3 = c
     end)
-    local tabList = ScreamUI.new("Frame", tabBar, {Name = "TabList", Size = UDim2.fromScale(1, 1),
+    local tabList = vexzUI.new("Frame", tabBar, {Name = "TabList", Size = UDim2.fromScale(1, 1),
         BackgroundTransparency = 1, BorderSizePixel = 0, ZIndex = 16})
-    ScreamUI.new("UIListLayout", tabList, {FillDirection = Enum.FillDirection.Vertical,
+    vexzUI.new("UIListLayout", tabList, {FillDirection = Enum.FillDirection.Vertical,
         HorizontalAlignment = Enum.HorizontalAlignment.Center, VerticalAlignment = Enum.VerticalAlignment.Top,
         Padding = UDim.new(0, 5), SortOrder = Enum.SortOrder.LayoutOrder})
-    ScreamUI.new("UIPadding", tabList, {PaddingTop = UDim.new(0, 6), PaddingBottom = UDim.new(0, 6), PaddingLeft = UDim.new(0, 5), PaddingRight = UDim.new(0, 5)})
-    local headingPanel = ScreamUI.new("Frame", main, {Name = "SectionPanel", Position = UDim2.fromOffset(92, 85),
-        Size = UDim2.new(1, -106, 0, 27), BackgroundColor3 = ScreamFX.PANEL,
+    vexzUI.new("UIPadding", tabList, {PaddingTop = UDim.new(0, 6), PaddingBottom = UDim.new(0, 6), PaddingLeft = UDim.new(0, 5), PaddingRight = UDim.new(0, 5)})
+    local headingPanel = vexzUI.new("Frame", main, {Name = "SectionPanel", Position = UDim2.fromOffset(92, 85),
+        Size = UDim2.new(1, -106, 0, 27), BackgroundColor3 = vexzFX.PANEL,
         BackgroundTransparency = 0.12, BorderSizePixel = 0, ZIndex = 6})
-    ScreamUI.round(headingPanel, 8)
-    ScreamUI.stroke(headingPanel, ROW_BORDER, 0.82, 1)
-    local pageHeading = ScreamUI.text(main, "01   /   MOVEMENT", UDim2.fromOffset(103, 87), UDim2.new(1, -122, 0, 23), 11, WHITE, 8)
+    vexzUI.round(headingPanel, 8)
+    vexzUI.stroke(headingPanel, ROW_BORDER, 0.82, 1)
+    local pageHeading = vexzUI.text(main, "01   /   MOVEMENT", UDim2.fromOffset(103, 87), UDim2.new(1, -122, 0, 23), 11, WHITE, 8)
     pageHeading.Name = "SectionHeading"
     pageHeading.Font = Enum.Font.GothamBold
-    local headingRule = ScreamUI.new("Frame", main, {Position = UDim2.fromOffset(98, 114),
+    local headingRule = vexzUI.new("Frame", main, {Position = UDim2.fromOffset(98, 114),
         Size = UDim2.new(1, -112, 0, 1), BackgroundColor3 = ROW_BORDER, BackgroundTransparency = 0.48, BorderSizePixel = 0, ZIndex = 7})
-    local tabContent = ScreamUI.new("Frame", main, {Name = "Content", Size = UDim2.new(1, -108, 1, -160),
+    local tabContent = vexzUI.new("Frame", main, {Name = "Content", Size = UDim2.new(1, -108, 1, -160),
         Position = UDim2.fromOffset(94, 120), BackgroundTransparency = 1, ClipsDescendants = true, ZIndex = 6})
-    local footer = ScreamUI.new("Frame", main, {Name = "Footer", Position = UDim2.new(0, 14, 1, -34),
+    local footer = vexzUI.new("Frame", main, {Name = "Footer", Position = UDim2.new(0, 14, 1, -34),
         Size = UDim2.new(1, -28, 0, 25), BackgroundTransparency = 1, ZIndex = 8})
-    local footerRule = ScreamUI.new("Frame", footer, {Size = UDim2.new(1, 0, 0, 1), BackgroundColor3 = getThemeColor(),
+    local footerRule = vexzUI.new("Frame", footer, {Size = UDim2.new(1, 0, 0, 1), BackgroundColor3 = getThemeColor(),
         BackgroundTransparency = 0.5, BorderSizePixel = 0, ZIndex = 8})
-    ScreamUI.new("UIGradient", footerRule, {Transparency = NumberSequence.new({
+    vexzUI.new("UIGradient", footerRule, {Transparency = NumberSequence.new({
         NumberSequenceKeypoint.new(0, 1), NumberSequenceKeypoint.new(0.5, 0.2), NumberSequenceKeypoint.new(1, 1)})})
-    ScreamFX.accent(footerRule, function(o, c) o.BackgroundColor3 = c end)
-    local avatar = ScreamUI.new("ImageLabel", footer, {Position = UDim2.fromOffset(2, 6), Size = UDim2.fromOffset(17, 17),
+    vexzFX.accent(footerRule, function(o, c) o.BackgroundColor3 = c end)
+    local avatar = vexzUI.new("ImageLabel", footer, {Position = UDim2.fromOffset(2, 6), Size = UDim2.fromOffset(17, 17),
         Image = "rbxthumb://type=AvatarHeadShot&id=" .. LP.UserId .. "&w=150&h=150", BackgroundColor3 = INP, BorderSizePixel = 0, ZIndex = 8})
-    ScreamUI.round(avatar, 9)
-    local avatarStroke = ScreamUI.stroke(avatar, getThemeColor(), 0.2, 1)
-    ScreamFX.accent(avatarStroke, function(o, c) o.Color = c end)
-    ScreamUI.text(footer, "@" .. LP.Name, UDim2.fromOffset(27, 5), UDim2.new(0.5, -32, 0, 18), 9, Color3.fromRGB(190, 176, 220), 9)
-    ScreamUI.footerStats = ScreamUI.text(footer, "SCREAMHUB", UDim2.new(0.5, 0, 0, 5), UDim2.new(0.5, -3, 0, 18), 8,
+    vexzUI.round(avatar, 9)
+    local avatarStroke = vexzUI.stroke(avatar, getThemeColor(), 0.2, 1)
+    vexzFX.accent(avatarStroke, function(o, c) o.Color = c end)
+    vexzUI.text(footer, "@" .. LP.Name, UDim2.fromOffset(27, 5), UDim2.new(0.5, -32, 0, 18), 9, Color3.fromRGB(190, 176, 220), 9)
+    vexzUI.footerStats = vexzUI.text(footer, "vexzHUB", UDim2.new(0.5, 0, 0, 5), UDim2.new(0.5, -3, 0, 18), 8,
         Color3.fromRGB(150, 130, 190), 9)
-    ScreamUI.footerStats.TextXAlignment = Enum.TextXAlignment.Right
+    vexzUI.footerStats.TextXAlignment = Enum.TextXAlignment.Right
     local tabs = {"Speed", "Custom", "Visual", "Settings", "Keybinds"}
     local titles = {"MOVE", "COMBAT", "VISUAL", "STEAL", "BINDS"}
     local headings = {"MOVEMENT", "COMBAT", "APPEARANCE", "AUTO STEAL", "KEYBINDS"}
     tabButtons = {}
     local contentPages = {}
-    ScreamUI.pages = {}
+    vexzUI.pages = {}
     local tabSelectors = {}
     local function paintTabs(activeIndex, animated)
         for idx, b in ipairs(tabButtons) do
@@ -10405,77 +10405,77 @@ function buildGui()
             b.TabBgGrad.Enabled = false
             b.TabStroke.Transparency = 1
             b.BackgroundTransparency = 1
-            ScreamFX.tween(b.Caption, animated and 0.22 or 0.01, {TextColor3 = on and WHITE or ScreamFX.DIM})
-            ScreamFX.tween(b.Underline, animated and 0.32 or 0.01, {Size = UDim2.fromOffset(on and 18 or 0, 2)}, Enum.EasingStyle.Back)
+            vexzFX.tween(b.Caption, animated and 0.22 or 0.01, {TextColor3 = on and WHITE or vexzFX.DIM})
+            vexzFX.tween(b.Underline, animated and 0.32 or 0.01, {Size = UDim2.fromOffset(on and 18 or 0, 2)}, Enum.EasingStyle.Back)
         end
-        ScreamFX.tween(tabIndicator, animated and 0.38 or 0.01,
+        vexzFX.tween(tabIndicator, animated and 0.38 or 0.01,
             {Position = UDim2.fromOffset(6, 6 + (activeIndex - 1) * 53)}, Enum.EasingStyle.Quint)
     end
     for i, name in ipairs(tabs) do
-        local button = ScreamUI.new("TextButton", tabList, {Name = name, Text = "", Size = UDim2.fromOffset(56, 48),
+        local button = vexzUI.new("TextButton", tabList, {Name = name, Text = "", Size = UDim2.fromOffset(56, 48),
             BackgroundColor3 = Color3.fromRGB(22, 16, 34), BackgroundTransparency = 1, BorderSizePixel = 0,
             Font = Enum.Font.GothamBold, TextSize = 9, TextColor3 = WHITE, ClipsDescendants = true,
             AutoButtonColor = false, ZIndex = 17, LayoutOrder = i})
-        ScreamUI.round(button, 10)
-        local stroke = ScreamUI.stroke(button, GRAY, 1, 1)
+        vexzUI.round(button, 10)
+        local stroke = vexzUI.stroke(button, GRAY, 1, 1)
         stroke.Name = "TabStroke"
-        ScreamUI.new("UIGradient", button, {Name = "TabBgGrad", Enabled = false,
+        vexzUI.new("UIGradient", button, {Name = "TabBgGrad", Enabled = false,
             Color = ColorSequence.new(Color3.fromRGB(48, 36, 70), Color3.fromRGB(18, 14, 26)), Rotation = 90})
         -- texte seul, sans icône
-        local caption = ScreamUI.text(button, titles[i], UDim2.fromOffset(0, 13), UDim2.fromOffset(56, 20), 9, ScreamFX.DIM, 18)
+        local caption = vexzUI.text(button, titles[i], UDim2.fromOffset(0, 13), UDim2.fromOffset(56, 20), 9, vexzFX.DIM, 18)
         caption.Name = "Caption"
         caption.TextXAlignment = Enum.TextXAlignment.Center
         caption.Font = Enum.Font.GothamBlack
-        local underline = ScreamUI.new("Frame", button, {Name = "Underline", Size = UDim2.fromOffset(0, 2),
+        local underline = vexzUI.new("Frame", button, {Name = "Underline", Size = UDim2.fromOffset(0, 2),
             AnchorPoint = Vector2.new(0.5, 0), Position = UDim2.new(0.5, 0, 0, 36), BackgroundColor3 = getThemeColor(),
             BorderSizePixel = 0, Visible = true, ZIndex = 18})
-        ScreamUI.round(underline, 2)
-        local page = ScreamUI.new("ScrollingFrame", tabContent, {Name = name, Size = UDim2.fromScale(1, 1),
+        vexzUI.round(underline, 2)
+        local page = vexzUI.new("ScrollingFrame", tabContent, {Name = name, Size = UDim2.fromScale(1, 1),
             BackgroundTransparency = 1, BorderSizePixel = 0, ScrollBarThickness = 3, ScrollBarImageColor3 = getThemeColor(),
             ScrollBarImageTransparency = 0.3, AutomaticCanvasSize = Enum.AutomaticSize.Y, CanvasSize = UDim2.new(),
             ScrollingDirection = Enum.ScrollingDirection.Y, ClipsDescendants = true, Visible = i == 1, ZIndex = 6})
-        ScreamFX.accent(page, function(o, c) o.ScrollBarImageColor3 = c end)
-        ScreamUI.new("UIListLayout", page, {Padding = UDim.new(0, 6), SortOrder = Enum.SortOrder.LayoutOrder,
+        vexzFX.accent(page, function(o, c) o.ScrollBarImageColor3 = c end)
+        vexzUI.new("UIListLayout", page, {Padding = UDim.new(0, 6), SortOrder = Enum.SortOrder.LayoutOrder,
             HorizontalAlignment = Enum.HorizontalAlignment.Center})
-        ScreamUI.new("UIPadding", page, {PaddingLeft = UDim.new(0, 12), PaddingRight = UDim.new(0, 12),
+        vexzUI.new("UIPadding", page, {PaddingLeft = UDim.new(0, 12), PaddingRight = UDim.new(0, 12),
             PaddingTop = UDim.new(0, 3), PaddingBottom = UDim.new(0, 18)})
         contentPages[name] = page
-        ScreamUI.pages[i] = page
+        vexzUI.pages[i] = page
         table.insert(tabButtons, button)
         local function select(silent)
             if not silent then
-                if playUiSound then pcall(playUiSound, "tab") elseif _G.__ScreamPlayUiSound then pcall(_G.__ScreamPlayUiSound, "tab") end
+                if playUiSound then pcall(playUiSound, "tab") elseif _G.__vexzPlayUiSound then pcall(_G.__vexzPlayUiSound, "tab") end
             end
             pageHeading.Text = string.format("%02d   /   %s", i, headings[i])
-            local previous = ScreamUI.activeTab
+            local previous = vexzUI.activeTab
             for _, p in pairs(contentPages) do p.Visible = false end
             page.Visible = true
-            ScreamUI.activeTab = i
+            vexzUI.activeTab = i
             paintTabs(i, previous ~= nil)
             if previous ~= i then
                 local direction = (previous and previous > i) and -1 or 1
-                page.Position = UDim2.fromOffset(0, ScreamFX.enabled() and 16 * direction or 0)
-                ScreamFX.tween(page, 0.34, {Position = UDim2.fromOffset(0, 0)}, Enum.EasingStyle.Quint)
-                if previous ~= nil then ScreamFX.staggerPage(page) end
+                page.Position = UDim2.fromOffset(0, vexzFX.enabled() and 16 * direction or 0)
+                vexzFX.tween(page, 0.34, {Position = UDim2.fromOffset(0, 0)}, Enum.EasingStyle.Quint)
+                if previous ~= nil then vexzFX.staggerPage(page) end
             end
         end
         tabSelectors[i] = select
         button.Activated:Connect(function() select(false) end)
         button.InputBegan:Connect(function(input)
             if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-                ScreamFX.ripple(button, ScreamFX.pointer(input))
+                vexzFX.ripple(button, vexzFX.pointer(input))
             end
         end)
         button.MouseEnter:Connect(function()
-            if ScreamUI.activeTab ~= i then ScreamFX.tween(caption, 0.15, {TextColor3 = GRAY}) end
+            if vexzUI.activeTab ~= i then vexzFX.tween(caption, 0.15, {TextColor3 = GRAY}) end
         end)
         button.MouseLeave:Connect(function()
-            if ScreamUI.activeTab ~= i then ScreamFX.tween(caption, 0.2, {TextColor3 = ScreamFX.DIM}) end
+            if vexzUI.activeTab ~= i then vexzFX.tween(caption, 0.2, {TextColor3 = vexzFX.DIM}) end
         end)
         button:SetAttribute("TabIndex", i)
         if i == 1 then select(true) end
     end
-    ScreamFX.accent(tabBar, function()
+    vexzFX.accent(tabBar, function()
         for _, b in ipairs(tabButtons) do
             local underlineRef = b:FindFirstChild("Underline")
             if underlineRef then underlineRef.BackgroundColor3 = getThemeColor() end
@@ -10553,7 +10553,7 @@ function buildGui()
     searchStroke.Color = getThemeColor()
     searchStroke.Transparency = 0.2
     searchStroke.Thickness = 1.5
-    ScreamFX.accent(searchStroke, function(o, c) o.Color = c end)
+    vexzFX.accent(searchStroke, function(o, c) o.Color = c end)
 
     local searchIcon = Instance.new("TextLabel")
     searchIcon.Name = "Icon"
@@ -10566,7 +10566,7 @@ function buildGui()
     searchIcon.TextSize = 18
     searchIcon.ZIndex = 13
     searchIcon.Parent = searchFrame
-    ScreamFX.accent(searchIcon, function(o, c) o.TextColor3 = c end)
+    vexzFX.accent(searchIcon, function(o, c) o.TextColor3 = c end)
 
     local searchBox = Instance.new("TextBox")
     searchBox.Name = "SearchBox"
@@ -10590,11 +10590,11 @@ function buildGui()
         searchStroke.Transparency = 0
         searchIcon.TextColor3 = getThemeColor()
         playUiSound("click")
-        ScreamFX.tween(searchFrame, 0.18, {BackgroundColor3 = Color3.fromRGB(26, 18, 42)})
+        vexzFX.tween(searchFrame, 0.18, {BackgroundColor3 = Color3.fromRGB(26, 18, 42)})
     end)
     searchBox.FocusLost:Connect(function(enter)
-        ScreamFX.tween(searchStroke, 0.2, {Transparency = 0.2})
-        ScreamFX.tween(searchFrame, 0.2, {BackgroundColor3 = Color3.fromRGB(17, 12, 27)})
+        vexzFX.tween(searchStroke, 0.2, {Transparency = 0.2})
+        vexzFX.tween(searchFrame, 0.2, {BackgroundColor3 = Color3.fromRGB(17, 12, 27)})
         if enter then playUiSound("select"); performSearch(searchBox.Text) end
     end)
     searchBox:GetPropertyChangedSignal("Text"):Connect(function()
@@ -10633,44 +10633,44 @@ function buildGui()
         return "Speed"
     end
     local function mkSect(page, text)
-        local row = ScreamUI.new("Frame", page, {Name = "Section", Size = UDim2.new(1, -4, 0, 26), BackgroundTransparency = 1,
+        local row = vexzUI.new("Frame", page, {Name = "Section", Size = UDim2.new(1, -4, 0, 26), BackgroundTransparency = 1,
             LayoutOrder = getNextOrder(page), ZIndex = 7})
         registerSearch(pageTabName(page), text, row)
-        local line = ScreamUI.new("Frame", row, {Name = "Accent", Position = UDim2.fromOffset(1, 9), Size = UDim2.fromOffset(4, 9),
+        local line = vexzUI.new("Frame", row, {Name = "Accent", Position = UDim2.fromOffset(1, 9), Size = UDim2.fromOffset(4, 9),
             BackgroundColor3 = getThemeColor(), BorderSizePixel = 0, ZIndex = 8})
-        ScreamUI.round(line, 2)
-        ScreamFX.accent(line, function(o, c) o.BackgroundColor3 = c end)
-        local label = ScreamUI.text(row, text:upper(), UDim2.fromOffset(13, 0), UDim2.new(1, -16, 1, -2),
+        vexzUI.round(line, 2)
+        vexzFX.accent(line, function(o, c) o.BackgroundColor3 = c end)
+        local label = vexzUI.text(row, text:upper(), UDim2.fromOffset(13, 0), UDim2.new(1, -16, 1, -2),
             9, Color3.fromRGB(200, 186, 232), 8)
         label.Font = Enum.Font.GothamBlack
-        local rule = ScreamUI.new("Frame", row, {Name = "Rule", Position = UDim2.new(0, 13, 1, -3),
+        local rule = vexzUI.new("Frame", row, {Name = "Rule", Position = UDim2.new(0, 13, 1, -3),
             Size = UDim2.new(1, -13, 0, 1), BackgroundColor3 = getThemeColor(), BackgroundTransparency = 0.45,
             BorderSizePixel = 0, ZIndex = 8})
-        ScreamUI.new("UIGradient", rule, {Transparency = NumberSequence.new({
+        vexzUI.new("UIGradient", rule, {Transparency = NumberSequence.new({
             NumberSequenceKeypoint.new(0, 0.1), NumberSequenceKeypoint.new(1, 1)})})
-        ScreamFX.accent(rule, function(o, c) o.BackgroundColor3 = c end)
+        vexzFX.accent(rule, function(o, c) o.BackgroundColor3 = c end)
         return row
     end
     local function mkRow(page, height)
-        local row = ScreamUI.new("Frame", page, {Name = "Control", Size = UDim2.new(1, -4, 0, math.max(height or 40, 40)),
+        local row = vexzUI.new("Frame", page, {Name = "Control", Size = UDim2.new(1, -4, 0, math.max(height or 40, 40)),
             BackgroundColor3 = ROW_BG, BackgroundTransparency = 0.1, BorderSizePixel = 0, ClipsDescendants = true,
             LayoutOrder = getNextOrder(page), ZIndex = 7})
-        ScreamUI.round(row, 10)
-        local stroke = ScreamUI.stroke(row, ROW_BORDER, 0.6, 1)
+        vexzUI.round(row, 10)
+        local stroke = vexzUI.stroke(row, ROW_BORDER, 0.6, 1)
         row.MouseEnter:Connect(function()
-            ScreamFX.tween(row, 0.18, {BackgroundColor3 = ScreamFX.ROW_HOVER})
-            ScreamFX.tween(stroke, 0.18, {Transparency = 0.2, Color = getThemeColor():Lerp(ROW_BORDER, 0.35)})
+            vexzFX.tween(row, 0.18, {BackgroundColor3 = vexzFX.ROW_HOVER})
+            vexzFX.tween(stroke, 0.18, {Transparency = 0.2, Color = getThemeColor():Lerp(ROW_BORDER, 0.35)})
         end)
         row.MouseLeave:Connect(function()
-            local active = row:GetAttribute("ScreamActive") == true
-            ScreamFX.tween(row, 0.24, {BackgroundColor3 = ROW_BG})
-            ScreamFX.tween(stroke, 0.24, {Transparency = active and 0.35 or 0.6,
+            local active = row:GetAttribute("vexzActive") == true
+            vexzFX.tween(row, 0.24, {BackgroundColor3 = ROW_BG})
+            vexzFX.tween(stroke, 0.24, {Transparency = active and 0.35 or 0.6,
                 Color = active and getThemeColor():Lerp(ROW_BORDER, 0.45) or ROW_BORDER})
         end)
         return row
     end
     local function mkLabel(row, text)
-        local lbl = ScreamUI.text(row, text, UDim2.fromOffset(14, 0), UDim2.new(0.48, -8, 1, 0), 12, WHITE, 8)
+        local lbl = vexzUI.text(row, text, UDim2.fromOffset(14, 0), UDim2.new(0.48, -8, 1, 0), 12, WHITE, 8)
         -- register if parent page known
         local page = row and row.Parent
         if page and text and text ~= "" then
@@ -10681,35 +10681,35 @@ function buildGui()
     local PILL_OFF = Color3.fromRGB(30, 22, 46)
     local KNOB_OFF = Color3.fromRGB(122, 108, 150)
     local function mkPill(row)
-        local pill = ScreamUI.new("Frame", row, {Name = "Track", Size = UDim2.fromOffset(44, 24),
+        local pill = vexzUI.new("Frame", row, {Name = "Track", Size = UDim2.fromOffset(44, 24),
             AnchorPoint = Vector2.new(1, 0.5), Position = UDim2.new(1, -13, 0.5, 0),
             BackgroundColor3 = PILL_OFF, BorderSizePixel = 0, ZIndex = 8})
-        ScreamUI.round(pill, 12)
-        ScreamUI.stroke(pill, ROW_BORDER, 0.35, 1)
-        local dot = ScreamUI.new("Frame", pill, {Name = "Knob", AnchorPoint = Vector2.new(0.5, 0.5),
+        vexzUI.round(pill, 12)
+        vexzUI.stroke(pill, ROW_BORDER, 0.35, 1)
+        local dot = vexzUI.new("Frame", pill, {Name = "Knob", AnchorPoint = Vector2.new(0.5, 0.5),
             Size = UDim2.fromOffset(16, 16), Position = UDim2.new(0, 12, 0.5, 0),
             BackgroundColor3 = KNOB_OFF, BorderSizePixel = 0, ZIndex = 9})
-        ScreamUI.round(dot, 8)
+        vexzUI.round(dot, 8)
         pill:SetAttribute("FXOn", false)
-        ScreamFX.pills[pill] = true
+        vexzFX.pills[pill] = true
         return pill, dot
     end
     local function animPill(pill, dot, on)
         on = on == true
         local accent = getThemeColor()
         pill:SetAttribute("FXOn", on)
-        ScreamFX.tween(pill, 0.22, {BackgroundColor3 = on and accent or PILL_OFF})
-        ScreamFX.tween(dot, 0.38, {
+        vexzFX.tween(pill, 0.22, {BackgroundColor3 = on and accent or PILL_OFF})
+        vexzFX.tween(dot, 0.38, {
             BackgroundColor3 = on and Color3.fromRGB(255, 255, 255) or KNOB_OFF,
             Position = on and UDim2.new(1, -12, 0.5, 0) or UDim2.new(0, 12, 0.5, 0),
         }, Enum.EasingStyle.Back)
-        if ScreamFX.enabled() then
+        if vexzFX.enabled() then
             dot.Size = UDim2.fromOffset(21, 14)
-            ScreamFX.tween(dot, 0.34, {Size = UDim2.fromOffset(16, 16)}, Enum.EasingStyle.Back)
+            vexzFX.tween(dot, 0.34, {Size = UDim2.fromOffset(16, 16)}, Enum.EasingStyle.Back)
         end
         local stroke = pill:FindFirstChildOfClass("UIStroke")
         if stroke then
-            ScreamFX.tween(stroke, 0.22, {Color = on and accent:Lerp(Color3.new(1, 1, 1), 0.25) or ROW_BORDER,
+            vexzFX.tween(stroke, 0.22, {Color = on and accent:Lerp(Color3.new(1, 1, 1), 0.25) or ROW_BORDER,
                 Transparency = on and 0.1 or 0.35})
         end
     end
@@ -10719,29 +10719,29 @@ function buildGui()
         label.Size = UDim2.new(1, -86, 1, 0)
         registerSearch(pageTabName(page), text, row)
         local pill, dot = mkPill(row)
-        local bar = ScreamUI.new("Frame", row, {Name = "ActiveBar", AnchorPoint = Vector2.new(0, 0.5),
+        local bar = vexzUI.new("Frame", row, {Name = "ActiveBar", AnchorPoint = Vector2.new(0, 0.5),
             Position = UDim2.new(0, 0, 0.5, 0), Size = UDim2.fromOffset(3, 0), BackgroundColor3 = getThemeColor(),
             BorderSizePixel = 0, ZIndex = 9})
-        ScreamUI.round(bar, 2)
-        ScreamFX.accent(bar, function(o, c) o.BackgroundColor3 = c end)
+        vexzUI.round(bar, 2)
+        vexzFX.accent(bar, function(o, c) o.BackgroundColor3 = c end)
         local on = false
         local function set(value)
             on = value == true
-            row:SetAttribute("ScreamActive", on)
+            row:SetAttribute("vexzActive", on)
             animPill(pill, dot, on)
             local stroke = row:FindFirstChildOfClass("UIStroke")
             if stroke then
-                ScreamFX.tween(stroke, 0.2, {Transparency = on and 0.35 or 0.6,
+                vexzFX.tween(stroke, 0.2, {Transparency = on and 0.35 or 0.6,
                     Color = on and getThemeColor():Lerp(ROW_BORDER, 0.45) or ROW_BORDER})
             end
-            ScreamFX.tween(bar, 0.32, {Size = UDim2.fromOffset(3, on and 22 or 0)}, Enum.EasingStyle.Back)
-            ScreamFX.tween(label, 0.2, {TextColor3 = on and getThemeColor():Lerp(Color3.new(1, 1, 1), 0.6) or WHITE})
+            vexzFX.tween(bar, 0.32, {Size = UDim2.fromOffset(3, on and 22 or 0)}, Enum.EasingStyle.Back)
+            vexzFX.tween(label, 0.2, {TextColor3 = on and getThemeColor():Lerp(Color3.new(1, 1, 1), 0.6) or WHITE})
         end
-        local hit = ScreamUI.new("TextButton", row, {Name = "ToggleHit", Size = UDim2.fromScale(1, 1), Text = "",
+        local hit = vexzUI.new("TextButton", row, {Name = "ToggleHit", Size = UDim2.fromScale(1, 1), Text = "",
             BackgroundTransparency = 1, AutoButtonColor = false, ZIndex = 10})
         hit.InputBegan:Connect(function(input)
             if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-                ScreamFX.ripple(row, ScreamFX.pointer(input))
+                vexzFX.ripple(row, vexzFX.pointer(input))
             end
         end)
         hit.Activated:Connect(function()
@@ -10749,35 +10749,35 @@ function buildGui()
             set(not on)
             if playUiSound then playUiSound("toggle", on) end
             local ok, err = pcall(callback, on)
-            if not ok then set(previous); warn("[Screamhub] " .. text .. ": " .. tostring(err)) end
+            if not ok then set(previous); warn("[vexzhub] " .. text .. ": " .. tostring(err)) end
             task.defer(function() pcall(saveAllSettings) end)
         end)
         return set
     end
     local function mkSelector(row, default, options, callback)
-        local frame = ScreamUI.new("Frame", row, {Name = "Selector", Size = UDim2.fromOffset(146, 30),
+        local frame = vexzUI.new("Frame", row, {Name = "Selector", Size = UDim2.fromOffset(146, 30),
             Position = UDim2.new(1, -156, 0.5, -15), BackgroundColor3 = INP, BorderSizePixel = 0, ZIndex = 8})
-        ScreamUI.round(frame, 8)
-        ScreamUI.stroke(frame, ROW_BORDER, 0.4, 1)
-        local label = ScreamUI.text(frame, default, UDim2.fromOffset(30, 0), UDim2.fromOffset(86, 30), 10, WHITE, 9)
+        vexzUI.round(frame, 8)
+        vexzUI.stroke(frame, ROW_BORDER, 0.4, 1)
+        local label = vexzUI.text(frame, default, UDim2.fromOffset(30, 0), UDim2.fromOffset(86, 30), 10, WHITE, 9)
         label.Font = Enum.Font.GothamBold
         label.TextXAlignment = Enum.TextXAlignment.Center
         for i, direction in ipairs({-1, 1}) do
-            local button = ScreamUI.new("TextButton", frame, {Size = UDim2.fromOffset(29, 30),
+            local button = vexzUI.new("TextButton", frame, {Size = UDim2.fromOffset(29, 30),
                 Position = UDim2.fromOffset(i == 1 and 0 or 117, 0), BackgroundColor3 = INP,
                 BorderSizePixel = 0, Text = direction == -1 and "‹" or "›", TextSize = 21,
                 Font = Enum.Font.GothamMedium, TextColor3 = getThemeColor(), AutoButtonColor = false, ZIndex = 9})
-            ScreamUI.round(button, 8)
-            ScreamFX.accent(button, function(o, c) o.TextColor3 = c end)
-            button.MouseEnter:Connect(function() ScreamFX.tween(button, 0.15, {BackgroundColor3 = GRAY_ACTIVE}) end)
-            button.MouseLeave:Connect(function() ScreamFX.tween(button, 0.2, {BackgroundColor3 = INP}) end)
+            vexzUI.round(button, 8)
+            vexzFX.accent(button, function(o, c) o.TextColor3 = c end)
+            button.MouseEnter:Connect(function() vexzFX.tween(button, 0.15, {BackgroundColor3 = GRAY_ACTIVE}) end)
+            button.MouseLeave:Connect(function() vexzFX.tween(button, 0.2, {BackgroundColor3 = INP}) end)
             button.Activated:Connect(function()
                 callback(direction, function(text)
                     label.Text = text
-                    if ScreamFX.enabled() then
+                    if vexzFX.enabled() then
                         label.TextTransparency = 0.8
                         label.Position = UDim2.fromOffset(30 + direction * 8, 0)
-                        ScreamFX.tween(label, 0.26, {TextTransparency = 0, Position = UDim2.fromOffset(30, 0)})
+                        vexzFX.tween(label, 0.26, {TextTransparency = 0, Position = UDim2.fromOffset(30, 0)})
                     end
                 end)
                 task.defer(function() pcall(saveAllSettings) end)
@@ -10787,22 +10787,22 @@ function buildGui()
     end
     local function mkDropdown(row, default, options, onSelect, width)
         local w = width or 130
-        local frame = ScreamUI.new("Frame", row, {Name = "Dropdown", Size = UDim2.fromOffset(w, 30),
+        local frame = vexzUI.new("Frame", row, {Name = "Dropdown", Size = UDim2.fromOffset(w, 30),
             Position = UDim2.new(1, -(w + 10), 0.5, -15), BackgroundColor3 = INP, BorderSizePixel = 0, ZIndex = 8})
-        ScreamUI.round(frame, 8)
-        local frameStroke = ScreamUI.stroke(frame, ROW_BORDER, 0.4, 1)
+        vexzUI.round(frame, 8)
+        local frameStroke = vexzUI.stroke(frame, ROW_BORDER, 0.4, 1)
 
-        local label = ScreamUI.text(frame, tostring(default), UDim2.fromOffset(10, 0), UDim2.fromOffset(w - 34, 30), 10, WHITE, 9)
+        local label = vexzUI.text(frame, tostring(default), UDim2.fromOffset(10, 0), UDim2.fromOffset(w - 34, 30), 10, WHITE, 9)
         label.Font = Enum.Font.GothamBold
         label.TextXAlignment = Enum.TextXAlignment.Left
         label.TextTruncate = Enum.TextTruncate.AtEnd
 
-        local arrow = ScreamUI.new("TextLabel", frame, {
+        local arrow = vexzUI.new("TextLabel", frame, {
             Size = UDim2.fromOffset(24, 30), Position = UDim2.new(1, -26, 0, 0),
             BackgroundTransparency = 1, Text = "▼", TextSize = 9, Rotation = 0,
             Font = Enum.Font.GothamBold, TextColor3 = getThemeColor(), ZIndex = 9
         })
-        ScreamFX.accent(arrow, function(o, c) o.TextColor3 = c end)
+        vexzFX.accent(arrow, function(o, c) o.TextColor3 = c end)
 
         local open = false
         local menu = nil
@@ -10811,16 +10811,16 @@ function buildGui()
         local function closeMenu()
             open = false
             if closeConn then closeConn:Disconnect(); closeConn = nil end
-            ScreamFX.tween(arrow, 0.25, {Rotation = 0})
-            ScreamFX.tween(frameStroke, 0.2, {Color = ROW_BORDER, Transparency = 0.4})
+            vexzFX.tween(arrow, 0.25, {Rotation = 0})
+            vexzFX.tween(frameStroke, 0.2, {Color = ROW_BORDER, Transparency = 0.4})
             local closing = menu
             menu = nil
             if closing then
-                if ScreamFX.enabled() and closing.Parent then
+                if vexzFX.enabled() and closing.Parent then
                     local shrink = TS:Create(closing, TweenInfo.new(0.16, Enum.EasingStyle.Quint, Enum.EasingDirection.In),
                         {Size = UDim2.fromOffset(closing.Size.X.Offset, 0)})
                     local closingStroke = closing:FindFirstChildOfClass("UIStroke")
-                    if closingStroke then ScreamFX.tween(closingStroke, 0.16, {Transparency = 1}) end
+                    if closingStroke then vexzFX.tween(closingStroke, 0.16, {Transparency = 1}) end
                     shrink.Completed:Connect(function() pcall(function() closing:Destroy() end) end)
                     shrink:Play()
                 else
@@ -10832,8 +10832,8 @@ function buildGui()
         local function openMenu()
             if open then closeMenu(); return end
             open = true
-            ScreamFX.tween(arrow, 0.3, {Rotation = 180}, Enum.EasingStyle.Back)
-            ScreamFX.tween(frameStroke, 0.2, {Color = getThemeColor(), Transparency = 0.05})
+            vexzFX.tween(arrow, 0.3, {Rotation = 180}, Enum.EasingStyle.Back)
+            vexzFX.tween(frameStroke, 0.2, {Color = getThemeColor(), Transparency = 0.05})
             if playUiSound then playUiSound("click") end
 
             local itemH = 28
@@ -10844,8 +10844,8 @@ function buildGui()
 
             menu = Instance.new("Frame")
             menu.Name = "DropdownMenu"
-            menu.Size = UDim2.fromOffset(menuW, ScreamFX.enabled() and 0 or menuH)
-            menu.BackgroundColor3 = ScreamFX.PANEL
+            menu.Size = UDim2.fromOffset(menuW, vexzFX.enabled() and 0 or menuH)
+            menu.BackgroundColor3 = vexzFX.PANEL
             menu.BorderSizePixel = 0
             menu.ZIndex = 50
             menu.ClipsDescendants = true
@@ -10873,7 +10873,7 @@ function buildGui()
             else
                 menu.Position = UDim2.fromOffset(abs.X + absSize.X - menuW, abs.Y + absSize.Y + 3)
             end
-            ScreamFX.tween(menu, 0.28, {Size = UDim2.fromOffset(menuW, menuH)}, Enum.EasingStyle.Quint)
+            vexzFX.tween(menu, 0.28, {Size = UDim2.fromOffset(menuW, menuH)}, Enum.EasingStyle.Quint)
 
             local holder = menu
             if #options > maxVisible then
@@ -10917,27 +10917,27 @@ function buildGui()
                 end
                 local restBg = btn.BackgroundColor3
                 local restText = btn.TextColor3
-                if ScreamFX.enabled() and idx <= 12 then
+                if vexzFX.enabled() and idx <= 12 then
                     btn.TextTransparency = 1
                     btn.BackgroundTransparency = 1
-                    ScreamFX.tween(btn, 0.22, {TextTransparency = 0, BackgroundTransparency = 0},
+                    vexzFX.tween(btn, 0.22, {TextTransparency = 0, BackgroundTransparency = 0},
                         Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0.03 + idx * 0.018)
                 end
                 btn.MouseEnter:Connect(function()
-                    ScreamFX.tween(btn, 0.14, {BackgroundColor3 = getThemeColor(), TextColor3 = Color3.fromRGB(255, 255, 255)})
+                    vexzFX.tween(btn, 0.14, {BackgroundColor3 = getThemeColor(), TextColor3 = Color3.fromRGB(255, 255, 255)})
                 end)
                 btn.MouseLeave:Connect(function()
-                    ScreamFX.tween(btn, 0.18, {BackgroundColor3 = restBg, TextColor3 = restText})
+                    vexzFX.tween(btn, 0.18, {BackgroundColor3 = restBg, TextColor3 = restText})
                 end)
                 btn.MouseButton1Click:Connect(function()
                     label.Text = tostring(opt)
                     closeMenu()
                     if playUiSound then playUiSound("select") end
                     if onSelect then onSelect(opt, function(t) label.Text = t end) end
-                    if ScreamFX.enabled() then
+                    if vexzFX.enabled() then
                         label.TextTransparency = 0.8
                         label.Position = UDim2.fromOffset(16, 0)
-                        ScreamFX.tween(label, 0.26, {TextTransparency = 0, Position = UDim2.fromOffset(10, 0)})
+                        vexzFX.tween(label, 0.26, {TextTransparency = 0, Position = UDim2.fromOffset(10, 0)})
                     end
                     task.defer(function() pcall(saveAllSettings) end)
                 end)
@@ -10973,10 +10973,10 @@ function buildGui()
         hit.ZIndex = 10
         hit.MouseButton1Click:Connect(openMenu)
         hit.MouseEnter:Connect(function()
-            if not open then ScreamFX.tween(frame, 0.15, {BackgroundColor3 = Color3.fromRGB(22, 16, 34)}) end
+            if not open then vexzFX.tween(frame, 0.15, {BackgroundColor3 = Color3.fromRGB(22, 16, 34)}) end
         end)
         hit.MouseLeave:Connect(function()
-            ScreamFX.tween(frame, 0.2, {BackgroundColor3 = INP})
+            vexzFX.tween(frame, 0.2, {BackgroundColor3 = INP})
         end)
 
         return label, closeMenu
@@ -10984,21 +10984,21 @@ function buildGui()
 
     local function mkBox(row, default, width, xoff, callback)
         local w = math.max(width or 56, 64)
-        local box = ScreamUI.new("TextBox", row, {Size = UDim2.fromOffset(w, 30),
+        local box = vexzUI.new("TextBox", row, {Size = UDim2.fromOffset(w, 30),
             Position = UDim2.new(1, -math.max(xoff or 76, w + 12), 0.5, -15), Text = tostring(default),
             BackgroundColor3 = INP, BorderSizePixel = 0, Font = Enum.Font.GothamBold, TextSize = 13,
             TextColor3 = Color3.fromRGB(206, 196, 228), ClearTextOnFocus = false, ZIndex = 9})
-        ScreamUI.round(box, 8)
-        local border = ScreamUI.stroke(box, ROW_BORDER, 0.4, 1)
+        vexzUI.round(box, 8)
+        local border = vexzUI.stroke(box, ROW_BORDER, 0.4, 1)
         local lastValid = tostring(default)
         box.Focused:Connect(function()
-            ScreamFX.tween(border, 0.18, {Color = getThemeColor(), Transparency = 0.05})
-            ScreamFX.tween(box, 0.18, {BackgroundColor3 = Color3.fromRGB(24, 17, 38), TextColor3 = WHITE})
+            vexzFX.tween(border, 0.18, {Color = getThemeColor(), Transparency = 0.05})
+            vexzFX.tween(box, 0.18, {BackgroundColor3 = Color3.fromRGB(24, 17, 38), TextColor3 = WHITE})
             if playUiSound then playUiSound("click") end
         end)
         box.FocusLost:Connect(function()
-            ScreamFX.tween(border, 0.22, {Color = ROW_BORDER, Transparency = 0.4})
-            ScreamFX.tween(box, 0.22, {BackgroundColor3 = INP, TextColor3 = Color3.fromRGB(206, 196, 228)})
+            vexzFX.tween(border, 0.22, {Color = ROW_BORDER, Transparency = 0.4})
+            vexzFX.tween(box, 0.22, {BackgroundColor3 = INP, TextColor3 = Color3.fromRGB(206, 196, 228)})
             local value = tonumber(box.Text)
             if value and value == value and math.abs(value) < math.huge then
                 local ok = pcall(callback, value)
@@ -11013,13 +11013,13 @@ function buildGui()
     end
     local function mkKeyButton(row, entry)
         local function name() return (entry.gp and entry.gp.Name) or (entry.kb and entry.kb.Name) or "None" end
-        local button = ScreamUI.new("TextButton", row, {Size = UDim2.fromOffset(116, 30),
+        local button = vexzUI.new("TextButton", row, {Size = UDim2.fromOffset(116, 30),
             AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.new(1, -70, 0.5, 0), Text = name(), BackgroundColor3 = INP,
             TextSize = 11, Font = Enum.Font.GothamBold, TextColor3 = WHITE, BorderSizePixel = 0,
             AutoButtonColor = false, ZIndex = 9})
-        ScreamUI.round(button, 8)
-        local keyStroke = ScreamUI.stroke(button, ROW_BORDER, 0.35, 1)
-        ScreamFX.press(button)
+        vexzUI.round(button, 8)
+        local keyStroke = vexzUI.stroke(button, ROW_BORDER, 0.35, 1)
+        vexzFX.press(button)
         local connection, axisConnection, timeout, listening = nil, nil, nil, false
         local pulse = nil
         local function stop()
@@ -11029,8 +11029,8 @@ function buildGui()
             if timeout then pcall(task.cancel, timeout); timeout = nil end
             if pulse then pulse:Cancel(); pulse = nil end
             button.Text = name(); button.TextColor3 = WHITE
-            ScreamFX.tween(keyStroke, 0.2, {Color = ROW_BORDER, Transparency = 0.35})
-            ScreamFX.tween(button, 0.2, {BackgroundColor3 = INP})
+            vexzFX.tween(keyStroke, 0.2, {Color = ROW_BORDER, Transparency = 0.35})
+            vexzFX.tween(button, 0.2, {BackgroundColor3 = INP})
         end
         button.Activated:Connect(function()
             if listening then stop(); return end
@@ -11039,8 +11039,8 @@ function buildGui()
             listening = true; _anyKeyListening = true
             button.Text = "Press a key"; button.TextColor3 = getThemeColor():Lerp(Color3.new(1, 1, 1), 0.35)
             keyStroke.Color = getThemeColor(); keyStroke.Transparency = 0
-            ScreamFX.tween(button, 0.2, {BackgroundColor3 = Color3.fromRGB(30, 20, 48)})
-            if ScreamFX.enabled() then
+            vexzFX.tween(button, 0.2, {BackgroundColor3 = Color3.fromRGB(30, 20, 48)})
+            if vexzFX.enabled() then
                 pulse = TS:Create(keyStroke, TweenInfo.new(0.55, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true),
                     {Transparency = 0.75})
                 pulse:Play()
@@ -11084,28 +11084,28 @@ function buildGui()
     do
         local row = mkRow(speedPage, 46)
         mkLabel(row, "Speed Motor")
-        ScreamUI.motorLabel = mkDropdown(row, useVenixCarryEngine and "Carry Boost" or "Direct", {"Direct", "Carry Boost"}, function(opt, update)
+        vexzUI.motorLabel = mkDropdown(row, useVenixCarryEngine and "Carry Boost" or "Direct", {"Direct", "Carry Boost"}, function(opt, update)
             useVenixCarryEngine = (opt == "Carry Boost")
             update(useVenixCarryEngine and "Carry Boost" or "Direct")
             if _G.__RivalHubRefreshSpeedEngine then _G.__RivalHubRefreshSpeedEngine() end
         end, 130)
     end
-    ScreamUI.carrySetter = mkToggle(speedPage, "Auto Carry", function(on)
-        ScreamVenixCarry:setSoftStealEnabled(on)
+    vexzUI.carrySetter = mkToggle(speedPage, "Auto Carry", function(on)
+        vexzVenixCarry:setSoftStealEnabled(on)
         if on then useVenixCarryEngine = true end
-        if ScreamUI.motorLabel then ScreamUI.motorLabel.Text = useVenixCarryEngine and "Carry Boost" or "Direct" end
+        if vexzUI.motorLabel then vexzUI.motorLabel.Text = useVenixCarryEngine and "Carry Boost" or "Direct" end
         if _G.__RivalHubRefreshSpeedEngine then _G.__RivalHubRefreshSpeedEngine() end
     end)
     do
         local row = mkRow(speedPage, 46); mkLabel(row, "Auto Carry Speed")
-        ScreamUI.carrySpeedBox = mkBox(row, ScreamVenixCarry.softStealSpeed, 60, 72, function(v)
-            ScreamVenixCarry:setSoftStealSpeed(v); ScreamUI.carrySpeedBox.Text = tostring(ScreamVenixCarry.softStealSpeed)
+        vexzUI.carrySpeedBox = mkBox(row, vexzVenixCarry.softStealSpeed, 60, 72, function(v)
+            vexzVenixCarry:setSoftStealSpeed(v); vexzUI.carrySpeedBox.Text = tostring(vexzVenixCarry.softStealSpeed)
         end)
     end
     do
         local row = mkRow(speedPage, 46); mkLabel(row, "Auto Carry Radius")
-        ScreamUI.carryRadiusBox = mkBox(row, ScreamVenixCarry.softStealRadius, 60, 72, function(v)
-            ScreamVenixCarry:setSoftStealRadius(v); ScreamUI.carryRadiusBox.Text = tostring(ScreamVenixCarry.softStealRadius)
+        vexzUI.carryRadiusBox = mkBox(row, vexzVenixCarry.softStealRadius, 60, 72, function(v)
+            vexzVenixCarry:setSoftStealRadius(v); vexzUI.carryRadiusBox.Text = tostring(vexzVenixCarry.softStealRadius)
         end)
     end
     mkSect(speedPage, "Active Mode")
@@ -11320,29 +11320,29 @@ function buildGui()
         local border = row:FindFirstChildOfClass("UIStroke"); if border then border:Destroy() end
         row.ClipsDescendants = false
         for i, asset in ipairs(backgroundImages) do
-            local card = ScreamUI.new("ImageButton", row, {Size = UDim2.new(1 / 3, -6, 1, 0),
+            local card = vexzUI.new("ImageButton", row, {Size = UDim2.new(1 / 3, -6, 1, 0),
                 Position = UDim2.new((i - 1) / 3, (i - 1) * 3, 0, 0), Image = "rbxassetid://" .. asset,
                 ScaleType = Enum.ScaleType.Crop, BackgroundColor3 = Color3.fromRGB(14, 10, 22),
                 BorderSizePixel = 0, AutoButtonColor = false, ClipsDescendants = true, ZIndex = 8})
-            ScreamUI.round(card, 12)
-            ScreamFX.accent(ScreamUI.stroke(card, getThemeColor(), 0.72, 1.7), function(o, c) o.Color = c end)
-            local scrim = ScreamUI.new("Frame", card, {Size = UDim2.fromScale(1, 1), BackgroundColor3 = Color3.fromRGB(10, 6, 18),
+            vexzUI.round(card, 12)
+            vexzFX.accent(vexzUI.stroke(card, getThemeColor(), 0.72, 1.7), function(o, c) o.Color = c end)
+            local scrim = vexzUI.new("Frame", card, {Size = UDim2.fromScale(1, 1), BackgroundColor3 = Color3.fromRGB(10, 6, 18),
                 BackgroundTransparency = 0.6, BorderSizePixel = 0, ZIndex = 9})
-            ScreamUI.round(scrim, 12)
-            local badge = ScreamUI.new("Frame", card, {Name = "Selected", Size = UDim2.fromOffset(16, 16),
+            vexzUI.round(scrim, 12)
+            local badge = vexzUI.new("Frame", card, {Name = "Selected", Size = UDim2.fromOffset(16, 16),
                 Position = UDim2.new(1, -22, 0, 6), BackgroundColor3 = getThemeColor(), BorderSizePixel = 0,
                 Visible = false, ZIndex = 10})
-            ScreamUI.round(badge, 6)
-            ScreamFX.accent(badge, function(o, c) o.BackgroundColor3 = c end)
-            local check = ScreamUI.text(badge, "✓", UDim2.fromOffset(0, 0), UDim2.fromScale(1, 1), 11, WHITE, 11)
+            vexzUI.round(badge, 6)
+            vexzFX.accent(badge, function(o, c) o.BackgroundColor3 = c end)
+            local check = vexzUI.text(badge, "✓", UDim2.fromOffset(0, 0), UDim2.fromScale(1, 1), 11, WHITE, 11)
             check.TextXAlignment = Enum.TextXAlignment.Center
-            local label = ScreamUI.text(card, "BACKGROUND " .. i,
+            local label = vexzUI.text(card, "BACKGROUND " .. i,
                 UDim2.new(0, 8, 1, -25), UDim2.new(1, -12, 0, 19), 9, WHITE, 10)
             label.Font = Enum.Font.GothamBold
             card.Activated:Connect(function() applyBackgroundMode("Background " .. i); pcall(saveAllSettings, true) end)
-            card.MouseEnter:Connect(function() ScreamFX.tween(scrim, 0.2, {BackgroundTransparency = 0.85}) end)
-            card.MouseLeave:Connect(function() ScreamFX.tween(scrim, 0.25, {BackgroundTransparency = 0.6}) end)
-            ScreamUI.cards[i] = card
+            card.MouseEnter:Connect(function() vexzFX.tween(scrim, 0.2, {BackgroundTransparency = 0.85}) end)
+            card.MouseLeave:Connect(function() vexzFX.tween(scrim, 0.25, {BackgroundTransparency = 0.6}) end)
+            vexzUI.cards[i] = card
         end
         applyBackgroundMode(backgroundMode)
     end
@@ -11350,8 +11350,8 @@ function buildGui()
     setHideButtonsVisual = mkToggle(visualPage, "Hide Button", function(on) toggleHideButtons(on) end)
     if setHideButtonsVisual then setHideButtonsVisual(hideButtonsEnabled) end
 
-    ScreamUI.lockButtonsSetter = mkToggle(visualPage, "Lock Mobile Buttons", function(on) mobileButtonsLocked = on end)
-    ScreamUI.effectsSetter = mkToggle(visualPage, "UI Effects", function(on) ScreamUI.effects = on end)
+    vexzUI.lockButtonsSetter = mkToggle(visualPage, "Lock Mobile Buttons", function(on) mobileButtonsLocked = on end)
+    vexzUI.effectsSetter = mkToggle(visualPage, "UI Effects", function(on) vexzUI.effects = on end)
     mkSect(visualPage, "Display")
     do
         local row = mkRow(visualPage, 42)
@@ -11359,7 +11359,7 @@ function buildGui()
         uiScaleBox = mkBox(row, uiScaleValue, 50, 56, function(v)
             local n = _clamp(_floor(v+0.5), 50, 150)
             uiScaleValue = n
-            if ScreamUI.fit then ScreamUI.fit() end
+            if vexzUI.fit then vexzUI.fit() end
             if pbScale then pbScale.Scale = n/100 end
         end)
     end
@@ -11558,17 +11558,17 @@ function buildGui()
         saveBtn.ZIndex = 8
         Instance.new("UICorner", saveBtn).CornerRadius = UDim.new(0, 8)
         saveBtn.ClipsDescendants = true
-        ScreamFX.press(saveBtn)
+        vexzFX.press(saveBtn)
         saveBtn.InputBegan:Connect(function(input)
             if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-                ScreamFX.ripple(saveBtn, ScreamFX.pointer(input), Color3.fromRGB(255, 255, 255))
+                vexzFX.ripple(saveBtn, vexzFX.pointer(input), Color3.fromRGB(255, 255, 255))
             end
         end)
         local saveStroke = Instance.new("UIStroke", saveBtn)
         saveStroke.Color = getThemeColor()
         saveStroke.Thickness = 1.5
         saveStroke.Transparency = 0.4
-        ScreamFX.accent(saveStroke, function(o, c) o.Color = c end)
+        vexzFX.accent(saveStroke, function(o, c) o.Color = c end)
         saveBtn.MouseEnter:Connect(function()
             TS:Create(saveBtn, TweenInfo.new(0.15), {BackgroundColor3 = getThemeColor()}):Play()
             TS:Create(saveBtn, TweenInfo.new(0.15), {TextColor3 = Color3.fromRGB(255,255,255)}):Play()
@@ -11580,7 +11580,7 @@ function buildGui()
         saveBtn.MouseButton1Click:Connect(function()
             local ok = saveAllSettings(true)
             saveBtn.Text = ok and "SAVED" or "ERROR"
-            ScreamFX.notify("CONFIG", ok and "Settings saved successfully." or "Could not save settings.", ok and "success" or "error")
+            vexzFX.notify("CONFIG", ok and "Settings saved successfully." or "Could not save settings.", ok and "success" or "error")
             task.delay(1.2, function()
                 if saveBtn and saveBtn.Parent then saveBtn.Text = "SAVE CONFIG" end
             end)
@@ -11603,17 +11603,17 @@ function buildGui()
         resetPosBtn.ZIndex = 8
         Instance.new("UICorner", resetPosBtn).CornerRadius = UDim.new(0, 8)
         resetPosBtn.ClipsDescendants = true
-        ScreamFX.press(resetPosBtn)
+        vexzFX.press(resetPosBtn)
         resetPosBtn.InputBegan:Connect(function(input)
             if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-                ScreamFX.ripple(resetPosBtn, ScreamFX.pointer(input), Color3.fromRGB(255, 255, 255))
+                vexzFX.ripple(resetPosBtn, vexzFX.pointer(input), Color3.fromRGB(255, 255, 255))
             end
         end)
         local resetStroke = Instance.new("UIStroke", resetPosBtn)
         resetStroke.Color = getThemeColor()
         resetStroke.Thickness = 1.5
         resetStroke.Transparency = 0.4
-        ScreamFX.accent(resetStroke, function(o, c) o.Color = c end)
+        vexzFX.accent(resetStroke, function(o, c) o.Color = c end)
         resetPosBtn.MouseEnter:Connect(function()
             TS:Create(resetPosBtn, TweenInfo.new(0.15), {BackgroundColor3 = getThemeColor()}):Play()
             TS:Create(resetPosBtn, TweenInfo.new(0.15), {TextColor3 = Color3.fromRGB(255,255,255)}):Play()
@@ -11628,7 +11628,7 @@ function buildGui()
             resetDebounce = true
             resetFloatingPositions()
             resetPosBtn.Text = "RESET"
-            ScreamFX.notify("POSITIONS", "Floating buttons and HUD were reset.", "success")
+            vexzFX.notify("POSITIONS", "Floating buttons and HUD were reset.", "success")
             task.delay(1.2, function()
                 if resetPosBtn and resetPosBtn.Parent then
                     resetPosBtn.Text = "RESET POSITIONS"
@@ -11654,10 +11654,10 @@ function buildGui()
         delBtn.ZIndex = 8
         Instance.new("UICorner", delBtn).CornerRadius = UDim.new(0, 8)
         delBtn.ClipsDescendants = true
-        ScreamFX.press(delBtn)
+        vexzFX.press(delBtn)
         delBtn.InputBegan:Connect(function(input)
             if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-                ScreamFX.ripple(delBtn, ScreamFX.pointer(input), Color3.fromRGB(255, 255, 255))
+                vexzFX.ripple(delBtn, vexzFX.pointer(input), Color3.fromRGB(255, 255, 255))
             end
         end)
         local delStroke = Instance.new("UIStroke", delBtn)
@@ -11695,7 +11695,7 @@ function buildGui()
                 local invoked, success = pcall(resetToFactoryDefaults)
                 success = invoked and success
                 delBtn.Text = success and "SETTINGS RESET" or "ERROR"
-                ScreamFX.notify("RESET", success and "All settings restored to default." or "Reset failed.", success and "success" or "error")
+                vexzFX.notify("RESET", success and "All settings restored to default." or "Reset failed.", success and "success" or "error")
                 delBtn.BackgroundColor3 = Color3.fromRGB(26, 19, 40)
                 delBtn.TextColor3 = Color3.fromRGB(170, 30, 50)
                 deleteState = 0
@@ -11716,7 +11716,7 @@ function buildGui()
     do
         mkSect(visualPage, "MUSIC")
         local musicSound = Instance.new("Sound")
-        musicSound.Name = "ScreamHubVX7Music"
+        musicSound.Name = "vexzHubVX7Music"
         musicSound.Volume = 0.45
         musicSound.Looped = false
         musicSound.Parent = pgui
@@ -11782,22 +11782,22 @@ function buildGui()
         end)
         local listRow = mkRow(visualPage, 42)
         mkLabel(listRow, "MUSIC LIST")
-        local listBtn = ScreamUI.new("TextButton", listRow, {
+        local listBtn = vexzUI.new("TextButton", listRow, {
             Name = "MusicListButton", Size = UDim2.fromOffset(32, 30),
             AnchorPoint = Vector2.new(1, 0.5), Position = UDim2.new(1, -10, 0.5, 0),
             BackgroundColor3 = Color3.fromRGB(30, 22, 46), BorderSizePixel = 0,
             Text = "+", TextSize = 18, Font = Enum.Font.GothamBold,
             TextColor3 = Color3.fromRGB(205, 207, 214), AutoButtonColor = false, ZIndex = 10
         })
-        ScreamUI.round(listBtn, 15)
-        ScreamFX.press(listBtn)
-        ScreamUI.stroke(listBtn, ROW_BORDER, 0.45, 1)
+        vexzUI.round(listBtn, 15)
+        vexzFX.press(listBtn)
+        vexzUI.stroke(listBtn, ROW_BORDER, 0.45, 1)
 
         -- Floating VX7-style music player, modeled after the supplied reference image.
-        local oldPopup = pgui:FindFirstChild("ScreamHubVX7MusicPlayer")
+        local oldPopup = pgui:FindFirstChild("vexzHubVX7MusicPlayer")
         if oldPopup then oldPopup:Destroy() end
         local popupGui = Instance.new("ScreenGui")
-        popupGui.Name = "ScreamHubVX7MusicPlayer"
+        popupGui.Name = "vexzHubVX7MusicPlayer"
         popupGui.ResetOnSpawn = false
         popupGui.IgnoreGuiInset = true
         popupGui.DisplayOrder = 80
@@ -11815,7 +11815,7 @@ function buildGui()
         Instance.new("UICorner", musicPopup).CornerRadius = UDim.new(0, 13)
         local popupStroke = Instance.new("UIStroke", musicPopup)
         popupStroke.Color = getThemeColor()
-        ScreamFX.accent(popupStroke, function(o, c) o.Color = c end)
+        vexzFX.accent(popupStroke, function(o, c) o.Color = c end)
         popupStroke.Thickness = 1.5
         local popupGradient = Instance.new("UIGradient", musicPopup)
         popupGradient.Color = ColorSequence.new({
@@ -11831,14 +11831,14 @@ function buildGui()
         header.Parent = musicPopup
         local headerGrad = Instance.new("UIGradient", header)
         headerGrad.Color = ColorSequence.new(getThemeColor():Lerp(Color3.new(0, 0, 0), 0.3), Color3.fromRGB(20, 14, 32))
-        ScreamFX.accent(headerGrad, function(o, c) o.Color = ColorSequence.new(c:Lerp(Color3.new(0, 0, 0), 0.3), Color3.fromRGB(20, 14, 32)) end)
+        vexzFX.accent(headerGrad, function(o, c) o.Color = ColorSequence.new(c:Lerp(Color3.new(0, 0, 0), 0.3), Color3.fromRGB(20, 14, 32)) end)
         headerGrad.Rotation = 0
         local title = Instance.new("TextLabel")
         title.BackgroundTransparency = 1
         title.Position = UDim2.new(0, 12, 0, 0)
         title.Size = UDim2.new(1, -48, 1, 0)
         title.Font = Enum.Font.GothamBlack
-        title.Text = "SCREAM MUSIC"
+        title.Text = "vexz MUSIC"
         title.TextSize = 13
         title.TextColor3 = Color3.fromRGB(245, 245, 247)
         title.TextXAlignment = Enum.TextXAlignment.Left
@@ -11855,8 +11855,8 @@ function buildGui()
         closeBtn.BorderSizePixel = 0
         closeBtn.Parent = header
         Instance.new("UICorner", closeBtn).CornerRadius = UDim.new(0, 6)
-        closeBtn.MouseEnter:Connect(function() ScreamFX.tween(closeBtn, 0.15, {BackgroundColor3 = Color3.fromRGB(255, 84, 112)}) end)
-        closeBtn.MouseLeave:Connect(function() ScreamFX.tween(closeBtn, 0.2, {BackgroundColor3 = Color3.fromRGB(40, 28, 62)}) end)
+        closeBtn.MouseEnter:Connect(function() vexzFX.tween(closeBtn, 0.15, {BackgroundColor3 = Color3.fromRGB(255, 84, 112)}) end)
+        closeBtn.MouseLeave:Connect(function() vexzFX.tween(closeBtn, 0.2, {BackgroundColor3 = Color3.fromRGB(40, 28, 62)}) end)
 
         -- Drag the player by holding its header (mouse or touch).
         header.Active = true
@@ -11905,7 +11905,7 @@ function buildGui()
             musicSound.SoundId = resolveMusicAsset(song.id) or ""
             musicSound.Volume = volumeValue
             for i, row in ipairs(musicRows) do
-                ScreamFX.tween(row, 0.2, {BackgroundColor3 = (i == currentSongIndex) and Color3.fromRGB(52, 34, 84) or Color3.fromRGB(22, 16, 34)})
+                vexzFX.tween(row, 0.2, {BackgroundColor3 = (i == currentSongIndex) and Color3.fromRGB(52, 34, 84) or Color3.fromRGB(22, 16, 34)})
                 local marker = row:FindFirstChild("PlayingMarker")
                 if marker then marker.Text = (i == currentSongIndex and musicEnabled) and "Ⅱ" or "↵" end
             end
@@ -11956,8 +11956,8 @@ function buildGui()
             marker.Text = "↵"
             marker.Parent = row
             row.Activated:Connect(function() setCurrentSong(index, true) end)
-            row.MouseEnter:Connect(function() ScreamFX.tween(rowLabel, 0.15, {TextColor3 = Color3.fromRGB(255, 255, 255)}) end)
-            row.MouseLeave:Connect(function() ScreamFX.tween(rowLabel, 0.2, {TextColor3 = Color3.fromRGB(205, 205, 214)}) end)
+            row.MouseEnter:Connect(function() vexzFX.tween(rowLabel, 0.15, {TextColor3 = Color3.fromRGB(255, 255, 255)}) end)
+            row.MouseLeave:Connect(function() vexzFX.tween(rowLabel, 0.2, {TextColor3 = Color3.fromRGB(205, 205, 214)}) end)
             table.insert(musicRows, row)
         end
 
@@ -11980,8 +11980,8 @@ function buildGui()
             b.BorderSizePixel = 0
             b.Parent = controls
             Instance.new("UICorner", b).CornerRadius = UDim.new(0, 6)
-            b.MouseEnter:Connect(function() ScreamFX.tween(b, 0.15, {BackgroundColor3 = getThemeColor()}) end)
-            b.MouseLeave:Connect(function() ScreamFX.tween(b, 0.2, {BackgroundColor3 = Color3.fromRGB(40, 28, 62)}) end)
+            b.MouseEnter:Connect(function() vexzFX.tween(b, 0.15, {BackgroundColor3 = getThemeColor()}) end)
+            b.MouseLeave:Connect(function() vexzFX.tween(b, 0.2, {BackgroundColor3 = Color3.fromRGB(40, 28, 62)}) end)
             return b
         end
         local previousButton = controlButton("≪", 5, 36)
@@ -12007,7 +12007,7 @@ function buildGui()
         volumeFill = Instance.new("Frame")
         volumeFill.Size = UDim2.new(volumeValue, 0, 1, 0)
         volumeFill.BackgroundColor3 = getThemeColor()
-        ScreamFX.accent(volumeFill, function(o, c) o.BackgroundColor3 = c end)
+        vexzFX.accent(volumeFill, function(o, c) o.BackgroundColor3 = c end)
         volumeFill.BorderSizePixel = 0
         volumeFill.Parent = volumeBar
         Instance.new("UICorner", volumeFill).CornerRadius = UDim.new(1, 0)
@@ -12042,7 +12042,7 @@ function buildGui()
             local bar = Instance.new("Frame")
             bar.Size = UDim2.new(0, 5, 0, 4 + ((i * 7) % 13))
             bar.BackgroundColor3 = getThemeColor()
-            ScreamFX.accent(bar, function(o, c) o.BackgroundColor3 = c end)
+            vexzFX.accent(bar, function(o, c) o.BackgroundColor3 = c end)
             table.insert(visualizerBars, bar)
             bar.BorderSizePixel = 0
             bar.Parent = visualizer
@@ -12105,9 +12105,9 @@ function buildGui()
             if state then
                 popupGui.Enabled = true
                 setVisualizer(true)
-                ScreamFX.pop(musicPopup, true)
+                vexzFX.pop(musicPopup, true)
             else
-                ScreamFX.pop(musicPopup, false, function()
+                vexzFX.pop(musicPopup, false, function()
                     if not musicOpen then
                         popupGui.Enabled = false
                         setVisualizer(false)
@@ -12193,7 +12193,7 @@ function buildGui()
     spacer.ZIndex = 7
 
     -- ===== VX7-STYLE STEAL HUD (Compact) =====
-    pbFrame = ScreamUI.new("Frame", gui, {
+    pbFrame = vexzUI.new("Frame", gui, {
         Name = "RivalHubAutoStealHud",
         Size = UDim2.fromOffset(372, 54),
         Position = UDim2.new(0.5, -186, 1, -134),
@@ -12204,27 +12204,27 @@ function buildGui()
         ClipsDescendants = true,
         ZIndex = 50,
     })
-    ScreamUI.hudScale = ScreamUI.new("UIScale", pbFrame, {Scale = 1})
-    ScreamUI.round(pbFrame, 10)
-    local hudStroke = ScreamUI.stroke(pbFrame, getThemeColor(), 0.45, 1)
+    vexzUI.hudScale = vexzUI.new("UIScale", pbFrame, {Scale = 1})
+    vexzUI.round(pbFrame, 10)
+    local hudStroke = vexzUI.stroke(pbFrame, getThemeColor(), 0.45, 1)
     hudStroke.Name = "OuterStroke"
 
     -- Percent (bottom-left)
-    progressPct = ScreamUI.text(pbFrame, "0%", UDim2.fromOffset(14, 24), UDim2.fromOffset(70, 22), 15,
+    progressPct = vexzUI.text(pbFrame, "0%", UDim2.fromOffset(14, 24), UDim2.fromOffset(70, 22), 15,
         Color3.fromRGB(255, 255, 255), 55)
     progressPct.Name = "StealProgressPercent"
     progressPct.Font = Enum.Font.GothamBold
     progressPct.TextXAlignment = Enum.TextXAlignment.Left
 
     -- Status (top-left)
-    progressStatus = ScreamUI.text(pbFrame, "STEAL", UDim2.fromOffset(14, 7), UDim2.fromOffset(70, 16), 8,
+    progressStatus = vexzUI.text(pbFrame, "STEAL", UDim2.fromOffset(14, 7), UDim2.fromOffset(70, 16), 8,
         Color3.fromRGB(205, 205, 214), 54)
     progressStatus.Name = "StealProgressStatus"
     progressStatus.Font = Enum.Font.GothamBold
     progressStatus.TextXAlignment = Enum.TextXAlignment.Left
 
     -- Vertical divider
-    local divider = ScreamUI.new("Frame", pbFrame, {
+    local divider = vexzUI.new("Frame", pbFrame, {
         Name = "Divider",
         Size = UDim2.fromOffset(1, 34),
         Position = UDim2.fromOffset(88, 10),
@@ -12235,7 +12235,7 @@ function buildGui()
     })
 
     -- Mode badge (top-right of track area)
-    local modePill = ScreamUI.new("Frame", pbFrame, {
+    local modePill = vexzUI.new("Frame", pbFrame, {
         Name = "ModeBadge",
         Size = UDim2.fromOffset(36, 14),
         Position = UDim2.fromOffset(320, 8),
@@ -12243,29 +12243,29 @@ function buildGui()
         BorderSizePixel = 0,
         ZIndex = 55,
     })
-    ScreamUI.round(modePill, 4)
-    ScreamUI.stroke(modePill, Color3.fromRGB(110, 80, 160), 0.4, 1)
-    stealHud.mode = ScreamUI.text(modePill, autoStealMode or "V4", UDim2.fromScale(0, 0), UDim2.fromScale(1, 1), 8,
+    vexzUI.round(modePill, 4)
+    vexzUI.stroke(modePill, Color3.fromRGB(110, 80, 160), 0.4, 1)
+    stealHud.mode = vexzUI.text(modePill, autoStealMode or "V4", UDim2.fromScale(0, 0), UDim2.fromScale(1, 1), 8,
         Color3.fromRGB(230, 230, 235), 56)
     stealHud.mode.Name = "StealMode"
     stealHud.mode.TextXAlignment = Enum.TextXAlignment.Center
     stealHud.mode.Font = Enum.Font.GothamBold
 
     -- FPS / PING row (bottom under track)
-    local fpsLbl = ScreamUI.text(pbFrame, "FPS", UDim2.fromOffset(104, 28), UDim2.fromOffset(28, 18), 8,
+    local fpsLbl = vexzUI.text(pbFrame, "FPS", UDim2.fromOffset(104, 28), UDim2.fromOffset(28, 18), 8,
         Color3.fromRGB(190, 190, 200), 55)
     fpsLbl.Font = Enum.Font.Gotham
     fpsLbl.TextXAlignment = Enum.TextXAlignment.Left
-    local fpsVal = ScreamUI.text(pbFrame, "60", UDim2.fromOffset(134, 28), UDim2.fromOffset(42, 18), 10,
+    local fpsVal = vexzUI.text(pbFrame, "60", UDim2.fromOffset(134, 28), UDim2.fromOffset(42, 18), 10,
         Color3.fromRGB(255, 255, 255), 55)
     fpsVal.Name = "FPSNeon"
     fpsVal.Font = Enum.Font.GothamMedium
     fpsVal.TextXAlignment = Enum.TextXAlignment.Left
-    local pingLbl = ScreamUI.text(pbFrame, "PING", UDim2.fromOffset(211, 28), UDim2.fromOffset(34, 18), 8,
+    local pingLbl = vexzUI.text(pbFrame, "PING", UDim2.fromOffset(211, 28), UDim2.fromOffset(34, 18), 8,
         Color3.fromRGB(190, 190, 200), 55)
     pingLbl.Font = Enum.Font.Gotham
     pingLbl.TextXAlignment = Enum.TextXAlignment.Left
-    local pingVal = ScreamUI.text(pbFrame, "0ms", UDim2.fromOffset(247, 28), UDim2.fromOffset(62, 18), 10,
+    local pingVal = vexzUI.text(pbFrame, "0ms", UDim2.fromOffset(247, 28), UDim2.fromOffset(62, 18), 10,
         Color3.fromRGB(255, 255, 255), 55)
     pingVal.Name = "PingNeon"
     pingVal.Font = Enum.Font.GothamMedium
@@ -12275,7 +12275,7 @@ function buildGui()
     stealHud.stats = nil
 
     -- Progress track
-    local track = ScreamUI.new("Frame", pbFrame, {
+    local track = vexzUI.new("Frame", pbFrame, {
         Name = "StealProgressTrack",
         Size = UDim2.fromOffset(258, 15),
         Position = UDim2.fromOffset(101, 8),
@@ -12285,8 +12285,8 @@ function buildGui()
         ClipsDescendants = true,
         ZIndex = 52,
     })
-    ScreamUI.round(track, 100)
-    progressFill = ScreamUI.new("Frame", track, {
+    vexzUI.round(track, 100)
+    progressFill = vexzUI.new("Frame", track, {
         Name = "Fill",
         Size = UDim2.new(0, 0, 1, 0),
         BackgroundColor3 = getThemeColor(),
@@ -12294,8 +12294,8 @@ function buildGui()
         ClipsDescendants = true,
         ZIndex = 53,
     })
-    ScreamUI.round(progressFill, 100)
-    local fillGrad = ScreamUI.new("UIGradient", progressFill, {
+    vexzUI.round(progressFill, 100)
+    local fillGrad = vexzUI.new("UIGradient", progressFill, {
         Rotation = -10,
         Color = ColorSequence.new({
             ColorSequenceKeypoint.new(0, Color3.new(getThemeColor().R * 0.55, getThemeColor().G * 0.55, getThemeColor().B * 0.55)),
@@ -12304,7 +12304,7 @@ function buildGui()
             ColorSequenceKeypoint.new(1, Color3.new(getThemeColor().R * 0.55, getThemeColor().G * 0.55, getThemeColor().B * 0.55)),
         }),
     })
-    local gloss = ScreamUI.new("Frame", progressFill, {
+    local gloss = vexzUI.new("Frame", progressFill, {
         Name = "Shine",
         Size = UDim2.new(1, 0, 0.36, 0),
         BackgroundColor3 = Color3.new(1, 1, 1),
@@ -12312,8 +12312,8 @@ function buildGui()
         BorderSizePixel = 0,
         ZIndex = 54,
     })
-    ScreamUI.round(gloss, 100)
-    ScreamUI.new("UIGradient", gloss, {
+    vexzUI.round(gloss, 100)
+    vexzUI.new("UIGradient", gloss, {
         Rotation = 90,
         Transparency = NumberSequence.new({
             NumberSequenceKeypoint.new(0, 0.18),
@@ -12335,14 +12335,14 @@ function buildGui()
 
     updateStealProgress(stealHud.value, stealHud.state)
     drag(pbFrame)
-    ScreamUI.fit()
+    vexzUI.fit()
     do
         local viewConnection
         local function followCamera()
             if viewConnection then viewConnection:Disconnect() end
             local cam = Workspace.CurrentCamera
-            if cam then viewConnection = cam:GetPropertyChangedSignal("ViewportSize"):Connect(ScreamUI.fit) end
-            ScreamUI.fit()
+            if cam then viewConnection = cam:GetPropertyChangedSignal("ViewportSize"):Connect(vexzUI.fit) end
+            vexzUI.fit()
         end
         local cameraConnection = Workspace:GetPropertyChangedSignal("CurrentCamera"):Connect(followCamera)
         followCamera()
@@ -12351,7 +12351,7 @@ function buildGui()
             if viewConnection then viewConnection:Disconnect() end
         end)
     end
-    ScreamUI.effectsLoop(gui)
+    vexzUI.effectsLoop(gui)
     task.spawn(function() pcall(function() game:GetService("ContentProvider"):PreloadAsync({bg}) end) end)
 end
 
@@ -12568,7 +12568,7 @@ function createMobilePanel()
     local buttonTexts = {"DROP\nBR", "AUTO\nLEFT", "BAT\nBYPASS", "AUTO\nRIGHT", "TP\nDOWN", "CARRY\nSPD", "LAGGER\nNORMAL", "LAGGER\nCARRY", "TP\nBATE"}
 
     local function createButton(name, text, order, isToggle, callback)
-        local btn = ScreamUI.new("TextButton", panel, {Name = name, Size = UDim2.fromOffset(BTN_W, BTN_H),
+        local btn = vexzUI.new("TextButton", panel, {Name = name, Size = UDim2.fromOffset(BTN_W, BTN_H),
             BackgroundColor3 = Color3.fromRGB(255, 255, 255), BorderSizePixel = 0, Text = "",
             AutoButtonColor = false, Active = true, ZIndex = 10})
         local saved = savedButtonPositions[name]
@@ -12587,31 +12587,31 @@ function createMobilePanel()
             end
         end
         btn.Position = UDim2.fromOffset(sx or x, sy or y)
-        ScreamUI.round(btn, 10)
-        ScreamUI.new("UIGradient", btn, {Name = "BtnGrad", Rotation = 90,
+        vexzUI.round(btn, 10)
+        vexzUI.new("UIGradient", btn, {Name = "BtnGrad", Rotation = 90,
             Color = ColorSequence.new(Color3.fromRGB(26, 19, 40), Color3.fromRGB(10, 8, 16))})
-        ScreamUI.stroke(btn, Color3.fromRGB(74, 56, 110), 0.35, 1.2)
-        local dot = ScreamUI.new("Frame", btn, {Name = "StatusDot", Size = UDim2.fromOffset(5, 5),
+        vexzUI.stroke(btn, Color3.fromRGB(74, 56, 110), 0.35, 1.2)
+        local dot = vexzUI.new("Frame", btn, {Name = "StatusDot", Size = UDim2.fromOffset(5, 5),
             Position = UDim2.new(1, -11, 0, 9), BackgroundColor3 = Color3.fromRGB(70, 70, 78), BorderSizePixel = 0, ZIndex = 11})
-        ScreamUI.round(dot, 3)
-        local label = ScreamUI.text(btn, text, UDim2.fromOffset(6, 10), UDim2.new(1, -12, 0, 37), 10,
+        vexzUI.round(dot, 3)
+        local label = vexzUI.text(btn, text, UDim2.fromOffset(6, 10), UDim2.new(1, -12, 0, 37), 10,
             Color3.fromRGB(230, 230, 235), 11)
         label.Name = "TextLabel"
         label.Font = Enum.Font.GothamBold
         label.TextXAlignment = Enum.TextXAlignment.Center
         label.TextWrapped = true
         label.TextTruncate = Enum.TextTruncate.None
-        local status = ScreamUI.text(btn, "OFF", UDim2.fromOffset(6, 52), UDim2.new(1, -12, 0, 8), 6,
+        local status = vexzUI.text(btn, "OFF", UDim2.fromOffset(6, 52), UDim2.new(1, -12, 0, 8), 6,
             Color3.fromRGB(126, 132, 139), 11)
         status.Name = "Status"
         status.TextXAlignment = Enum.TextXAlignment.Center
-        local scale = ScreamUI.new("UIScale", btn, {Scale = floatingButtonScale})
+        local scale = vexzUI.new("UIScale", btn, {Scale = floatingButtonScale})
         table.insert(_floatingUIScales, scale)
         btn.ClipsDescendants = true
-        if ScreamFX.enabled() then
+        if vexzFX.enabled() then
             -- apparition en cascade des boutons flottants
             scale.Scale = 0
-            ScreamFX.tween(scale, 0.45, {Scale = floatingButtonScale}, Enum.EasingStyle.Back, Enum.EasingDirection.Out, 0.12 + (order or 0) * 0.045)
+            vexzFX.tween(scale, 0.45, {Scale = floatingButtonScale}, Enum.EasingStyle.Back, Enum.EasingDirection.Out, 0.12 + (order or 0) * 0.045)
         end
         local active = false
         local function setActive(value)
@@ -12633,12 +12633,12 @@ function createMobilePanel()
             if pointer.UserInputType == Enum.UserInputType.Touch and input ~= pointer then return end
             if pointer.UserInputType == Enum.UserInputType.MouseButton1 and input.UserInputType ~= Enum.UserInputType.MouseButton1 then return end
             pointer = nil
-            ScreamUI.activeInput = nil
+            vexzUI.activeInput = nil
             _isDraggingButton = false
             TS:Create(scale, TweenInfo.new(0.32, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Scale = floatingButtonScale}):Play()
             if moved < 8 then
                 local ok, err = pcall(callback, setActive, active)
-                if not ok then warn("[Screamhub Button] " .. name .. ": " .. tostring(err)) end
+                if not ok then warn("[vexzhub Button] " .. name .. ": " .. tostring(err)) end
             elseif not uiLocked and not mobileButtonsLocked then
                 savedButtonPositions[name] = {X = btn.Position.X.Offset, Y = btn.Position.Y.Offset}
             end
@@ -12646,13 +12646,13 @@ function createMobilePanel()
             pcall(saveAllSettings)
         end
         btn.InputBegan:Connect(function(input)
-            if ScreamUI.activeInput then return end
+            if vexzUI.activeInput then return end
             if input.UserInputType ~= Enum.UserInputType.MouseButton1 and input.UserInputType ~= Enum.UserInputType.Touch then return end
             pointer, dragStart, origin, moved = input, input.Position, btn.Position, 0
-            ScreamUI.activeInput = input
+            vexzUI.activeInput = input
             _isDraggingButton = true
             TS:Create(scale, TweenInfo.new(0.09), {Scale = floatingButtonScale * 0.93}):Play()
-            ScreamFX.ripple(btn, ScreamFX.pointer(input))
+            vexzFX.ripple(btn, vexzFX.pointer(input))
         end)
         local moveConn = UIS.InputChanged:Connect(function(input)
             if not pointer then return end
@@ -12669,7 +12669,7 @@ function createMobilePanel()
         btn.InputEnded:Connect(finish)
         btn.Destroying:Connect(function()
             moveConn:Disconnect(); endConn:Disconnect()
-            if pointer then ScreamUI.activeInput = nil; _isDraggingButton = false end
+            if pointer then vexzUI.activeInput = nil; _isDraggingButton = false end
         end)
         btn.Position = clampPosition(btn.Position)
         buttons[name] = {btn = btn, setActive = setActive, label = label, clampPosition = clampPosition}
@@ -13002,13 +13002,13 @@ function updateUIFromLoaded()
 
     applyBackgroundMode(backgroundMode)
     applyFloatingButtonScale()
-    if ScreamUI.fit then ScreamUI.fit() end
-    if ScreamUI.motorLabel then ScreamUI.motorLabel.Text = useVenixCarryEngine and "Carry Boost" or "Direct" end
-    if ScreamUI.carrySetter then ScreamUI.carrySetter(ScreamVenixCarry.softStealEnabled) end
-    if ScreamUI.carrySpeedBox then ScreamUI.carrySpeedBox.Text = tostring(ScreamVenixCarry.softStealSpeed) end
-    if ScreamUI.carryRadiusBox then ScreamUI.carryRadiusBox.Text = tostring(ScreamVenixCarry.softStealRadius) end
-    if ScreamUI.effectsSetter then ScreamUI.effectsSetter(ScreamUI.effects) end
-    if ScreamUI.lockButtonsSetter then ScreamUI.lockButtonsSetter(mobileButtonsLocked) end
+    if vexzUI.fit then vexzUI.fit() end
+    if vexzUI.motorLabel then vexzUI.motorLabel.Text = useVenixCarryEngine and "Carry Boost" or "Direct" end
+    if vexzUI.carrySetter then vexzUI.carrySetter(vexzVenixCarry.softStealEnabled) end
+    if vexzUI.carrySpeedBox then vexzUI.carrySpeedBox.Text = tostring(vexzVenixCarry.softStealSpeed) end
+    if vexzUI.carryRadiusBox then vexzUI.carryRadiusBox.Text = tostring(vexzVenixCarry.softStealRadius) end
+    if vexzUI.effectsSetter then vexzUI.effectsSetter(vexzUI.effects) end
+    if vexzUI.lockButtonsSetter then vexzUI.lockButtonsSetter(mobileButtonsLocked) end
 
     if uiLocked and setLockUIVisual then setLockUIVisual(true) end
 
@@ -13194,7 +13194,7 @@ if gui and main then
 
     task.spawn(function()
         local waited = 0
-        while pgui:FindFirstChild("ScreamHubIntro") and waited < 15 do
+        while pgui:FindFirstChild("vexzHubIntro") and waited < 15 do
             task.wait(0.25)
             waited = waited + 0.25
         end
@@ -13202,7 +13202,7 @@ if gui and main then
         pcall(function()
             local entry = KB and KB.GuiHide
             local key = entry and ((entry.kb and entry.kb.Name) or (entry.gp and entry.gp.Name)) or "your keybind"
-            ScreamFX.notify("SCREAMHUB", "Interface loaded. Press " .. key .. " to hide / show.", "success", 4)
+            vexzFX.notify("vexzHUB", "Interface loaded. Press " .. key .. " to hide / show.", "success", 4)
         end)
     end)
 
@@ -13267,7 +13267,7 @@ if gui and main then
                 title.Size = UDim2.new(1, -20, 0, 24)
                 title.Position = UDim2.new(0, 10, 0, 8)
                 title.BackgroundTransparency = 1
-                title.Text = "⚠ SCREAMHUB: " .. #_bootErrors .. " sección(es) fallaron"
+                title.Text = "⚠ vexzHUB: " .. #_bootErrors .. " sección(es) fallaron"
                 title.TextColor3 = Color3.fromRGB(255, 100, 110)
                 title.Font = Enum.Font.GothamBold
                 title.TextSize = 13
@@ -13484,7 +13484,7 @@ UIS.InputBegan:Connect(function(input, gpe)
     end
     if kbMatch(KB.GuiHide, kc) then
         if main then
-            local isOpen = ScreamUI.guiOpen
+            local isOpen = vexzUI.guiOpen
             if isOpen == nil then isOpen = main.Visible end
             if isOpen then hideGui() else showGui() end
         end
