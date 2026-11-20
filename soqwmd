@@ -1,9 +1,6 @@
-
-
-if not permitido then
-    LocalPlayer:Kick("Acesso negado. Você não tem permissão para usar este script.")
-    return
-end
+-- ══════════════════════════════════════════════════════════
+--  ruby.cc — Visual Spawner
+-- ══════════════════════════════════════════════════════════
 
 -- wait for the place to finish initial load before running anything;
 -- prevents missing services / unstreamed instances on early-injection.
@@ -3755,7 +3752,7 @@ local glowColors = {
 for gi, gc in ipairs(glowColors) do
     New("TextLabel", {
         Size=UDim2.new(1,-20,1,0), Position=UDim2.new(0,10,0,0),
-        Text="idkhxzz",
+        Text="ruby.cc",
         TextColor3=gc, Font=Enum.Font.GothamBlack,
         TextSize=11, BackgroundTransparency=1,
         TextTransparency=0.5 - (gi-1)*0.15,
