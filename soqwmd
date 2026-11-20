@@ -3752,7 +3752,7 @@ local glowColors = {
 for gi, gc in ipairs(glowColors) do
     New("TextLabel", {
         Size=UDim2.new(1,-20,1,0), Position=UDim2.new(0,10,0,0),
-        Text="ruby.cc",
+        Text="idkhxzz",
         TextColor3=gc, Font=Enum.Font.GothamBlack,
         TextSize=11, BackgroundTransparency=1,
         TextTransparency=0.5 - (gi-1)*0.15,
