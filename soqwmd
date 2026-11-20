@@ -33,7 +33,6 @@ if not permitido then
     LocalPlayer:Kick("Acesso negado. Você não tem permissão para usar este script.")
     return
 end
--- ============================================================
 -- ══════════════════════════════════════════════════════════
 --  ruby.cc — Visual Spawner
 -- ══════════════════════════════════════════════════════════
