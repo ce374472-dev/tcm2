@@ -1,34 +1,4 @@
--- ============================================================
--- WHITELIST
--- ============================================================
-local Players = game:GetService("Players")
-local LocalPlayer = Players.LocalPlayer
 
--- Espera o LocalPlayer carregar antes de continuar
-while not LocalPlayer do
-    task.wait()
-    LocalPlayer = Players.LocalPlayer
-end
-
-local WHITELIST = {
-    "idkhxzz",
-    "rickbesthb00",
-    "roborkkj",
-    "teteuh00192",
-    "snwzzx7x",
-    "lims1002",
-    "marquim0114",
-}
-
-local MeuNome = string.lower(LocalPlayer.Name)
-local permitido = false
-
-for _, nome in ipairs(WHITELIST) do
-    if MeuNome == nome then
-        permitido = true
-        break
-    end
-end
 
 if not permitido then
     LocalPlayer:Kick("Acesso negado. Você não tem permissão para usar este script.")
