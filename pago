@@ -12,7 +12,6 @@ end
 
 local WHITELIST = {
     "idkhxzz",
-    "teteuh00192",
 }
 
 local MeuNome = string.lower(LocalPlayer.Name)
